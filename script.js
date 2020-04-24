@@ -1,4 +1,4 @@
 const person = {
-  name: 'Jo-Ann Lieuw-A-Peuw',
+  name: 'Johan Lieuw-A-Peuw',
   job: 'Designer'
 }
