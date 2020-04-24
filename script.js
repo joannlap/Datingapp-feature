@@ -1,9 +1,7 @@
 const person = {
-  name: 'Johan Lieuw-A-Peuw',
+  name: 'Jo-Ann Lieuw-A-Peuw',
   job: 'Designer'
 }
-
-// console.log(person)
 
 function listObject(object) {
   return `Hello ${object.name}`
