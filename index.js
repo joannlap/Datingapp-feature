@@ -2,7 +2,7 @@
 const express = require('express') //inladen van express package
 const app = express() //opstarten van express applicatie
 const port = 3000 //adres van je webserver
-const yoMomma = require('yo-mamma').default
+const yoMomma = require('yo-mamma').default //extern package
 let insult
 
 // middleware
