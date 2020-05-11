@@ -1,5 +1,5 @@
 function about (req, res) {
-  return res.send("About Pixby app")
+  return console.log("About Pixby app")
 }
 
 module.exports = about;
