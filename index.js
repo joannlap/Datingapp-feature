@@ -1,34 +1,38 @@
-// packages
+// variables
+const hbs = require('hbs')
 const express = require('express') //inladen van express package
 const app = express() //opstarten van express applicatie
 const port = 3000 //adres van je webserver
 const yoMomma = require('yo-mamma').default //extern package
-let insult
 
-// middleware
+
+app.set('view engine', 'hbs')
+app.set('views', 'hbs')
+// gebruikt deze map om html bestanden te serveren (rootfolder)
 app.use(express.static('public'))
-
+const fatoe = yoMomma()
+const tweedeFatoe = yoMomma()
 
 // routing of static pages
+// generates hbs file with sent data
+// Hbs tranformeert hbs files naar .html en
+// vertsuurd deze naar public folder
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/home.html')
-  insult = yoMomma()
-  console.log(insult)
+  res.render('index', {
+    fatoe
+  })
 })
 
-app.get('/about', (req, res) => {
-  res.sendFile(__dirname + '/public/about.html')
+app.get('/match', (req, res) => {
+  res.render('match', {
+    tweedeFatoe
+  })
 })
 
-app.get('/contact', (req, res) => {
-  res.sendFile(__dirname + '/public/contact.html')
-})
-
-app.get('*', (req, res) => {
-  res.sendFile(__dirname + '/public/error.html')
-})
 
 // Application running on port...
 app.listen(port, function () {
   return console.log(`app draait op port ${port}!!`)
+  //  insult = yoMomma()
+  //  return console.log(insult)
 })
