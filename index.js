@@ -6,15 +6,18 @@ const app = express() //opstarten van express applicatie
 const port = 3000 //adres van je webserver
 const yoMomma = require('yo-mamma').default //extern package
 const fatoe = yoMomma()
+const path = require('path')
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',
+  layoutsDir: path.join(__dirname, 'views/layout')
 }))
 app.set('view engine', 'hbs')
 // app.set('views', 'hbs')
 
 // gebruikt deze map (public) om html bestanden te serveren
 app.use(express.static('public'));
+hbs.registerPartials(path.join(__dirname, '/views/partials'))
 
 // different routes of static pages
 // Hbs tranformeert hbs files naar .html en vertsuurd deze naar public folder
@@ -34,7 +37,7 @@ app.get('/match', (req, res) => {
     isAgeValid: false
   });
 });
-  
+
 
 //renders couple objects containing arrays to the profile.hbs
 app.get('/profile', (req, res) => {

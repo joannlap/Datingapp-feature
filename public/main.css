@@ -7,6 +7,12 @@ body {
   background-color: #ffe4cf;
 }
 
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 h1,
 p {
   display: flex;
