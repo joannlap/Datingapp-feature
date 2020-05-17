@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="css/main.css">
+{{#each people as |name|}}
+<p>{{name}}</p>
+{{/each}};
+<hr>
+
+{{#each interests as |value key|}}
+{{#each value.skills as |skills key|}}
+<p>{{key}}: {{skills}}</p>
+{{/each}}
+<hr>
+{{#each value.hobbies as |hobbies xKey|}}
+<p>{{xKey}}: {{hobbies}}</p>
+{{/each}}
+{{/each}};

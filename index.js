@@ -1,38 +1,64 @@
 // variables
+const exphbs = require('express-handlebars')
 const hbs = require('hbs')
 const express = require('express') //inladen van express package
 const app = express() //opstarten van express applicatie
 const port = 3000 //adres van je webserver
 const yoMomma = require('yo-mamma').default //extern package
-
-
-app.set('view engine', 'hbs')
-app.set('views', 'hbs')
-// gebruikt deze map om html bestanden te serveren (rootfolder)
-app.use(express.static('public'))
 const fatoe = yoMomma()
-const tweedeFatoe = yoMomma()
 
-// routing of static pages
-// generates hbs file with sent data
-// Hbs tranformeert hbs files naar .html en
-// vertsuurd deze naar public folder
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main',
+}));
+app.set('view engine', 'hbs');
+// app.set('views', 'hbs')
+
+// gebruikt deze map (public) om html bestanden te serveren
+app.use(express.static('public'));
+
+// different routes of static pages
+// Hbs tranformeert hbs files naar .html en vertsuurd deze naar public folder
 app.get('/', (req, res) => {
   res.render('index', {
+    title: 'home',
     fatoe
-  })
-})
+  });
+});
 
 app.get('/match', (req, res) => {
   res.render('match', {
-    tweedeFatoe
-  })
-})
+    title: 'match',
+    name: 'Zuko',
+    age: 20,
+    isName: true,
+    isAgeValid: false
+  });
+});
+  
+
+//renders couple objects containing arrays to the profile.hbs
+app.get('/profile', (req, res) => {
+  res.render('profile', {
+    title: 'profile',
+    people: [
+      "Katara",
+      "Aang",
+      "Sokka",
+      "Zuko",
+      "Toph",
+    ],
+    interests: [{
+        skills: ['firebending', 'earthbending', 'airbending']
+      },
+      {
+        hobbies: ['violin', 'reading']
+      }
+    ]
+  });
+});
 
 
 // Application running on port...
 app.listen(port, function () {
   return console.log(`app draait op port ${port}!!`)
-  //  insult = yoMomma()
-  //  return console.log(insult)
-})
+});

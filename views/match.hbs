@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="css/main.css">
+
+<h1>hiii welcome to Pixby!</h1>
+<p>The dating app where only baby pictures are allowed.</p>
+
+{{!-- if isDisplayName is true, then it will display the name or else name is not found--}}
+{{#if isName}}
+<p>My name is {{name}}</p>
+{{else}}
+<p>Name is not found :(</p>
+{{/if}}
+
+{{#if isAgeValid}}
+<p>I am {{age}}</p>
+{{else}}
+<p>no age provided :(</p>
+{{/if}};
