@@ -1,9 +1,11 @@
-<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="main.css">
+{{!-- #each loops --}}
+{{!-- loops over every single name inside people array --}}
 {{#each people as |name|}}
 <p>{{name}}</p>
 {{/each}};
 <hr>
-
+{{!-- loops over every single value inside interest array --}}
 {{#each interests as |value key|}}
 {{#each value.skills as |skills key|}}
 <p>{{key}}: {{skills}}</p>

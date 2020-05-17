@@ -9,8 +9,8 @@ const fatoe = yoMomma()
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',
-}));
-app.set('view engine', 'hbs');
+}))
+app.set('view engine', 'hbs')
 // app.set('views', 'hbs')
 
 // gebruikt deze map (public) om html bestanden te serveren
