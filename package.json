@@ -2,10 +2,10 @@
   "name": "Pixby",
   "version": "1.0.0",
   "description": "Only baby pictures allowed.",
-  "main": "index.js",
+  "main": "",
   "scripts": {
     "start": "node index.js",
-    "reload": "nodemon index.js"
+    "reload": "nodemon"
   },
   "repository": {
     "type": "git",

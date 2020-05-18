@@ -8,7 +8,7 @@ const fatoe = yoMomma()
 const path = require('path')
 
 app.set('view engine', 'hbs')
-app.set('views', 'views') //checkt door de viewsmap
+app.set('views', 'views') //checkt door de views map
 
 // gebruikt deze map (public) om html bestanden te serveren
 app.use(express.static('public'));
