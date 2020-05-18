@@ -1,5 +1,4 @@
 // variables
-const exphbs = require('express-handlebars')
 const hbs = require('hbs')
 const express = require('express') //inladen van express package
 const app = express() //opstarten van express applicatie
@@ -8,12 +7,8 @@ const yoMomma = require('yo-mamma').default //extern package
 const fatoe = yoMomma()
 const path = require('path')
 
-app.engine('handlebars', exphbs({
-  defaultLayout: 'main',
-  layoutsDir: path.join(__dirname, 'views/layout')
-}))
 app.set('view engine', 'hbs')
-// app.set('views', 'hbs')
+app.set('views', 'views') //checkt door de viewsmap
 
 // gebruikt deze map (public) om html bestanden te serveren
 app.use(express.static('public'));
