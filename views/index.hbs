@@ -1,5 +1,19 @@
 {{>header}}
-<h1>hiii welcome to Pixby!</h1>
-<p>The dating app where only baby pictures are allowed.</p>
-<h1>{{fatoe}}</h1>
-{{>footer}};
+<h1>hiii welcome to Pixby!
+  <br>
+  The dating app where only baby pictures are allowed.</h1>
+{{!-- loops over every key inside userData array of objects --}}
+<ul>
+  {{#each users}}
+  <li>
+    <p>{{name}}: {{age}}, {{profession}}</p>
+    <div class="wrapper">
+      <form method="POST" action="/match">
+        <input type="submit" name="dislike" value="dislike">
+        <input type="submit" name="like" value="like">
+      </form>
+    </div>
+  </li>
+  {{/each}}
+</ul>
+{{>footer}}

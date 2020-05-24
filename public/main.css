@@ -7,14 +7,25 @@ body {
   background-color: #ffe4cf;
 }
 
+/* ul li {
+  position: absolute;
+} */
+
 header {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 h1,
-p {
+p,
+li {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,4 +35,22 @@ p {
   color: black;
   font-size: 20px;
   border-radius: 2rem;
+}
+
+
+
+input,
+a {
+  width: 120px;
+  padding: 20px;
+  margin: 0.5em;
+  font-size: 16px;
+  text-align: center;
+  background-color: #8886C5;
+  color: #f9f9f9;
+  border: none;
+  border-radius: 3.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
 }
