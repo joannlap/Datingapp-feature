@@ -53,13 +53,6 @@ app.get('/match-list', (req, res) => {
   })
 })
 
-app.get('/match', (req, res) => {
-  res.render('match', {
-    title: 'match',
-    users: userData[Math.floor(Math.random() * userData.length)]
-  });
-});
-
 // res.render => naar pagina
 // res.redirect => naar route
 
@@ -68,7 +61,7 @@ app.post('/match', (req, res) => {
   if (req.body.like) {
     res.render('match', {
       title: 'match',
-      users: userData[Math.floor(Math.random() * userData.length)]
+      users: userData[0]
     })
     console.log(req.body.like)
   } else if (req.body.dislike) {
