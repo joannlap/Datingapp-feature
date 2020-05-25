@@ -1,19 +1,37 @@
 {{>header}}
-<h1>hiii welcome to Pixby!
-  <br>
-  The dating app where only baby pictures are allowed.</h1>
-{{!-- loops over every key inside userData array of objects --}}
-<ul>
-  {{#each users}}
-  <li>
-    <p>{{name}}: {{age}}, {{profession}}</p>
-    <div class="wrapper">
-      <form method="POST" action="/match">
-        <input type="submit" name="dislike" value="dislike">
-        <input type="submit" name="like" value="like">
-      </form>
-    </div>
-  </li>
-  {{/each}}
-</ul>
+
+<body class="home">
+  <ul class="container">
+    {{#each users}}
+    <li>
+      <section>
+        <figure><img src="img/components/{{pic}}" alt="">
+          <figcaption class="card_cap">
+            <h2>{{name}}, {{age}}</h2>
+            <h3>{{profession}}</h3>
+          </figcaption>
+        </figure>
+        <form method="POST" action="/match">
+          <div class="decline">
+            <div class="white-btn">
+              <input type="submit" class="fa-input" value="&#xf004" name="dislike">
+            </div>
+          </div>
+          <div class="superlike">
+            <div class="white-btn">
+              <input type="submit" class="fa-input" value="&#xf004" name="superlike">
+            </div>
+          </div>
+          <div class="like">
+            <div class="white-btn">
+              {{!-- <input type="image" value="like" src="img/components/heart.svg" name="like"> --}}
+              <input type="submit" class="fa-input" value="&#xf004" name="like">
+            </div>
+          </div>
+        </form>
+      </section>
+    </li>
+    {{/each}}
+  </ul>
+</body>
 {{>footer}}

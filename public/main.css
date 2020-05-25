@@ -1,50 +1,33 @@
 * {
-  margin: 0;
+  box-sizing: border-box;
   padding: 0;
+  margin: 0;
+  font-family: "Montserrat",
+    sans-serif;
 }
 
-body {
-  background-color: #ffe4cf;
+
+/********************** 
+    login page
+**********************/
+
+.logo {
+  padding: 5em;
 }
 
-/* ul li {
-  position: absolute;
-} */
-
-header {
+.logo,
+section {
+  /* position: relative; */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-h1,
-p,
-li {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2em;
-  margin: 3em;
-  background-color: aliceblue;
-  color: black;
-  font-size: 20px;
-  border-radius: 2rem;
-}
-
-
-
-input,
-a {
-  width: 120px;
+button {
+  width: 300px;
   padding: 20px;
   margin: 0.5em;
-  font-size: 16px;
+  font-size: 18px;
   text-align: center;
   background-color: #8886C5;
   color: #f9f9f9;
@@ -53,4 +36,367 @@ a {
   font-weight: 600;
   cursor: pointer;
   outline: none;
+}
+
+.twitter {
+  border-style: solid;
+  border-color: #8886C5;
+  background-color: transparent;
+  color: black;
+  font-weight: 300;
+}
+
+section {
+  flex-direction: column;
+}
+
+
+/********************** 
+    HOME
+**********************/
+
+header {
+  padding: 1em;
+  height: 5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1000;
+}
+
+ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  align-items: center;
+  padding: 6em 2em 3em 2em;
+}
+
+nav {
+  flex: 1 0 auto;
+}
+
+li>img {
+  height: 2em;
+}
+
+#baby_icon {
+  display: block;
+  width: 4rem;
+}
+
+li>#logo {
+  height: 5rem;
+}
+
+#logo {
+  display: none;
+}
+
+
+.baby {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  /* min-width: 960px; */
+  margin: 1em;
+  margin-top: 5em;
+  padding: 5px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 5em;
+  position: relative;
+}
+
+/* .container li {
+  position: absolute;
+  bottom: 50%;
+  top: 50%;
+} */
+
+/*************************************** 
+   navbar: decline, superlike, like
+***************************************/
+
+ul section {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: min-content;
+  overflow: hidden;
+}
+
+ul section form {
+  display: flex;
+  width: auto;
+  height: 200px;
+  position: absolute;
+  bottom: -50px;
+}
+
+ul section form>div {
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background-color: #FFACB7;
+  align-self: flex-end;
+}
+
+ul section form .superlike {
+  align-self: flex-start;
+  position: relative;
+}
+
+ul section form .like {
+  position: relative;
+  left: -70px;
+}
+
+form div:first-of-type,
+form div:last-of-type {
+  z-index: 2;
+}
+
+ul section form .decline {
+  position: relative;
+  right: -70px;
+}
+
+ul section form .white-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  margin-bottom: 3.9em;
+}
+
+.white-btn>input[type="image"] {
+  height: 2.5em;
+}
+
+section form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.home figure {
+  position: relative;
+}
+
+.card_cap {
+  position: absolute;
+  bottom: 40%;
+  right: 0%;
+  padding: 2em;
+  background-color: #FFE0AC;
+  font-size: 12px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.card_cap h3 {
+  font-weight: 100;
+  font-size: 11px;
+}
+
+/********************** 
+    MATCH
+**********************/
+
+.match_image {
+  position: relative;
+  padding: 3em 0 2em 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section h1 {
+  padding-bottom: 0.8em;
+  color: #8886C5;
+}
+
+section a .reveal {
+  background-color: #FFACB7;
+}
+
+section a .keepswiping {
+  border-style: solid;
+  border-color: #FFACB7;
+  background-color: transparent;
+  color: black;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+/********************** 
+    PROFILE
+**********************/
+
+article.about {
+  padding-bottom: 3em;
+}
+
+article.about>p {
+  font-size: 12px;
+}
+
+article h2 {
+  padding-bottom: 0.5em;
+  color: #f9f9f9
+}
+
+article:first-child {
+  font-size: 14px;
+}
+
+article:last-child {
+  font-size: 14px;
+}
+
+button.btn_interest {
+  padding: 1em 0 1em 0;
+  width: 120px;
+  font-size: 12px;
+  background-color: #f9f9f9;
+  color: black;
+}
+
+.chat-btn {
+  display: flex;
+  justify-content: center;
+  background-color: #FFACB7;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 6;
+}
+
+div.textbox {
+  position: relative;
+  padding-top: 15em;
+  z-index: 6;
+}
+
+figure .collin_adult {
+  position: relative;
+  height: 560px;
+}
+
+figcaption {
+  position: absolute;
+  top: 15em;
+}
+
+figcaption p:first-child {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+figcaption p:last-child {
+  margin-top: 1em;
+  font-style: italic;
+}
+
+.fillimage img {
+  position: absolute;
+  height: 80%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.gradient {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.gradient::before {
+  content: "";
+  position: absolute;
+  top: 20vh;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(136, 134, 197);
+  z-index: 5;
+  background: rgb(136, 134, 197);
+  background: linear-gradient(0deg, rgba(136, 134, 197) 50%, rgba(136, 134, 197, 0) 100%);
+}
+
+
+.profilecap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  color: #f9f9f9;
+}
+
+.textbox,
+figcaption {
+  position: relative;
+  padding: 2em;
+  z-index: 6;
+}
+
+
+@media screen and (min-width: 700px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0;
+    grid-gap: 3em;
+    align-self: center;
+  }
+
+  li>img {
+    height: 2em;
+  }
+
+  li>#logo {
+    display: block;
+    height: 4rem;
+  }
+
+  #baby_icon {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  li>img {
+    height: 3em;
+  }
+
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2em;
+    position: relative;
+  }
+
+  /* profile */
+  div.textbox {
+    padding: 6em 0 0 35em;
+  }
+
+  .profilecap {
+    justify-content: space-evenly;
+    flex-direction: row;
+    width: 40%;
+  }
 }

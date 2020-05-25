@@ -3,11 +3,12 @@ const
   hbs = require('hbs')
 express = require('express') //inladen van express package
 app = express() //opstarten van express applicatie
-port = 3000 //adres van je webserver
+port = 4000 //adres van je webserver
 yoMomma = require('yo-mamma').default //extern package
 fatoe = yoMomma()
-bodyParser = require('body-parser');
+bodyParser = require('body-parser')
 path = require('path')
+require('dotenv').config()
 
 app
   .set('view engine', 'hbs')
@@ -21,23 +22,134 @@ hbs.registerPartials(path.join(__dirname, '/views/partials'))
 
 // different routes of static pages
 // Hbs tranformeert hbs files naar .html en vertsuurd deze naar public folder
-
 const userData = [{
-    name: 'Aang',
-    age: 17,
-    profession: 'airbending'
+    name: 'Collin',
+    id: 1,
+    age: 21,
+    location: 'Toronto, Canada',
+    pic: 'collin.png',
+    profession: 'Choreographer',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
   },
   {
-    name: 'Zuko',
-    age: 19,
-    profession: 'firebending'
+    name: 'Brandon',
+    id: 2,
+    age: 21,
+    location: 'Montreal, Canada',
+    pic: 'brandon.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
   },
   {
-    name: 'Sokka',
-    age: 19,
-    profession: 'waterbending'
+    name: 'Cameron',
+    id: 3,
+    age: 21,
+    location: 'Hamilton, Canada',
+    pic: 'cameron.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
+  },
+  {
+    name: 'Steven',
+    id: 4,
+    age: 21,
+    location: 'Quebec, Canada',
+    pic: 'steven.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
+  },
+  {
+    name: 'Dwight',
+    id: 5,
+    age: 21,
+    location: 'Vancouver, Canada',
+    pic: 'dwight.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
+  },
+  {
+    name: 'Dré',
+    id: 6,
+    age: 21,
+    location: 'Toronto, Canada',
+    pic: 'dré.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
+  },
+  {
+    name: 'Zac',
+    id: 7,
+    age: 21,
+    location: 'Mississauga, Canada',
+    pic: 'zac.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
+  },
+  {
+    name: 'Bradley',
+    id: 8,
+    age: 21,
+    location: 'Kitchener, Canada',
+    pic: 'bradley.png',
+    profession: '',
+    about: '',
+    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
+    liked: [],
+    disliked: []
   },
 ]
+
+//array wordt omgezet in Json format
+const users = JSON.stringify(userData)
+console.log(users)
+
+const {
+  MongoClient,
+} = require('mongodb');
+databaseName = 'pixby';
+url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
+
+MongoClient.connect(url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}, (error, client) => {
+  if (error) {
+    return console.log('Unable to connect to database');
+  } else if (client) {
+    return console.log('database is connected')
+  }
+
+  const db = client.db(databaseName);
+
+  // db.collection('users').insertMany(
+
+  // ).then((result) => {
+  //   console.log(result);
+  // }).catch((error) => {
+  //   console.log(error);
+  // });
+});
 
 app.get('/', (req, res) => {
   res.render('index', {
