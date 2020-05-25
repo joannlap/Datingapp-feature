@@ -2,8 +2,16 @@
 {{#with users}}
 <p>{{name}}: {{age}}, {{profession}}</p>
 {{/with}}
-<div class="wrapper">
+<figure class="match_image">
+  <img src="img/components/match.png" alt="">
+</figure>
+<section>
+  <h1>You've got a match!</h1>
+  <a href="/profile"><button class="reveal">Reveal identity</button></a>
+  <a href="/"><button type="button" class='keepswiping'>Keep on swiping</button></a>
+</section>
+{{>footer}}
+{{!-- <div class="wrapper">
   <a href="/profile">Reveal identity</a>
   <a href="/">Keep Swiping</a>
-</div>
-{{>footer}}
+</div> --}}

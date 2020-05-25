@@ -1,14 +1,48 @@
+<div class="fillimage">
+  <img src="img/components/bigcollin.jpg" alt="">
+</div>
 {{> header}}
-{{!-- #each loops --}}
-{{!-- loops over every single value inside interest array --}}
-{{#each interests as |value key|}}
-{{#each value.skills as |skills key|}}
-<p>{{key}}: {{skills}}</p>
-{{/each}}
-<hr>
-{{#each value.hobbies as |hobbies xKey|}}
-<p>{{xKey}}: {{hobbies}}</p>
-{{/each}}
-{{/each}};
+<div class="gradient">
+  <figure>
+    <!-- <img class="collin_adult" src="img/components/collin_adult.jpg" alt=""> -->
+    <figcaption class="profilecap">
+      <div>
+        <p>Collin, 21</p>
+        <p>Toronto, Canada</p>
+        <p>Choreographer</p>
+      </div>
+      <div class="chat-btn">
+        <img src="img/components/chat-white.svg" alt="">
+      </div>
+    </figcaption>
+  </figure>
 
+
+  <div class="textbox">
+    <article class="about">
+      <h2>About</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi labore perspiciatis vero doloremque
+        exercitationem, perferendis ullam! Tempora nemo obcaecati repudiandae ab quisquam voluptatum modi illo
+        tenetur
+        beatae, maxime tempore sunt.</p>
+    </article>
+
+    <article class="interest">
+      <h2>Interest</h2>
+      <button class="btn_interest">
+        <p>dance</p>
+      </button>
+      <button class="btn_interest">
+        <p>cooking</p>
+      </button>
+      <button class="btn_interest">
+        <p>photography</p>
+      </button>
+      <button class="btn_interest">
+        <p>gaming</p>
+      </button>
+    </article>
+  </div>
+</div>
+</div>
 {{> footer}}

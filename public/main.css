@@ -288,7 +288,7 @@ button.btn_interest {
 
 div.textbox {
   position: relative;
-  padding-top: 15em;
+  padding-top: 20em;
   z-index: 6;
 }
 
@@ -299,7 +299,7 @@ figure .collin_adult {
 
 figcaption {
   position: absolute;
-  top: 15em;
+  top: 20em;
 }
 
 figcaption p:first-child {
@@ -398,5 +398,9 @@ figcaption {
     justify-content: space-evenly;
     flex-direction: row;
     width: 40%;
+  }
+
+  .fillimage img {
+    width: 50%;
   }
 }

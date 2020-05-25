@@ -87,7 +87,7 @@ const userData = [{
     id: 6,
     age: 21,
     location: 'Toronto, Canada',
-    pic: 'dré.png',
+    pic: 'dre.png',
     profession: '',
     about: '',
     interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
