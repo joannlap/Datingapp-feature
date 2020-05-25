@@ -1,14 +1,12 @@
 // variables
-const
-  hbs = require('hbs')
-express = require('express') //inladen van express package
-app = express() //opstarten van express applicatie
-port = 4000 //adres van je webserver
-yoMomma = require('yo-mamma').default //extern package
-fatoe = yoMomma()
-bodyParser = require('body-parser')
-path = require('path')
+const hbs = require('hbs')
+const express = require('express') //inladen van express package
+const app = express() //opstarten van express applicatie
+const port = 4000 //adres van je webserver
+const bodyParser = require('body-parser')
+const path = require('path')
 require('dotenv').config()
+const mongo = require('mongodb');
 
 app
   .set('view engine', 'hbs')
@@ -22,147 +20,56 @@ hbs.registerPartials(path.join(__dirname, '/views/partials'))
 
 // different routes of static pages
 // Hbs tranformeert hbs files naar .html en vertsuurd deze naar public folder
-const userData = [{
-    name: 'Collin',
-    id: 1,
-    age: 21,
-    location: 'Toronto, Canada',
-    pic: 'collin.png',
-    profession: 'Choreographer',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Brandon',
-    id: 2,
-    age: 21,
-    location: 'Montreal, Canada',
-    pic: 'brandon.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Cameron',
-    id: 3,
-    age: 21,
-    location: 'Hamilton, Canada',
-    pic: 'cameron.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Steven',
-    id: 4,
-    age: 21,
-    location: 'Quebec, Canada',
-    pic: 'steven.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Dwight',
-    id: 5,
-    age: 21,
-    location: 'Vancouver, Canada',
-    pic: 'dwight.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Dré',
-    id: 6,
-    age: 21,
-    location: 'Toronto, Canada',
-    pic: 'dre.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Zac',
-    id: 7,
-    age: 21,
-    location: 'Mississauga, Canada',
-    pic: 'zac.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-  {
-    name: 'Bradley',
-    id: 8,
-    age: 21,
-    location: 'Kitchener, Canada',
-    pic: 'bradley.png',
-    profession: '',
-    about: '',
-    interest: ['Dance', 'Cooking', 'Photography', 'Gaming'],
-    liked: [],
-    disliked: []
-  },
-]
 
-//array wordt omgezet in Json format
-const users = JSON.stringify(userData)
-console.log(users)
 
-const {
-  MongoClient,
-} = require('mongodb');
-databaseName = 'pixby';
-url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
+//CONNECT TO DATABASE
+// let usersCollection = null
 
-MongoClient.connect(url, {
+let db = null
+let url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
+let usersCollection = null
+
+mongo.MongoClient.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}, (error, client) => {
-  if (error) {
+}, (err, client) => {
+  if (err) {
     return console.log('Unable to connect to database');
   } else if (client) {
-    return console.log('database is connected')
+    console.log('database is connected')
   }
 
-  const db = client.db(databaseName);
-
-  // db.collection('users').insertMany(
-
-  // ).then((result) => {
-  //   console.log(result);
-  // }).catch((error) => {
-  //   console.log(error);
-  // });
+  db = client.db(process.env.DB_NAME);
+  usersCollection = db.collection('users')
 });
 
-app.get('/', (req, res) => {
-  res.render('index', {
-    title: 'home',
-    users: userData
-  });
-});
+// laadt de indexpagina
+// functie die mij (de gebruiker) wegfiltert , om alle gebruikers te tonen op de homepagina
+app.get('/', async (req, res, next) => {
+  try {
+    //let gebruikers = await usersCollection.find().toArray();
+    let notMe = await usersCollection.find({
+      id: {
+        $ne: 9
+      }
+    }).toArray();
+
+    console.log(notMe)
+    res.render('index', {
+      title: 'home',
+      users: notMe
+    });
+  } catch (err) {
+    next(err)
+  }
+})
 
 app.get('/match-list', (req, res) => {
   res.render('match-list', {
     title: ' match-list',
     users: userData
   })
+  //liked people inladen
 })
 
 // res.render => naar pagina
@@ -182,7 +89,6 @@ app.post('/match', (req, res) => {
   }
 })
 
-
 //renders couple objects containing arrays to the profile.hbs
 app.get('/profile', (req, res) => {
   res.render('profile', {
@@ -197,6 +103,8 @@ app.get('/profile', (req, res) => {
   });
 });
 
+// app.get('/*')
+
 
 // Application running on port...
 app.listen(port, function () {
@@ -204,3 +112,10 @@ app.listen(port, function () {
 });
 
 // home > match > profile > match overzicht
+//   db.collection('users').findMany(
+// userdata
+//   ).then((result) => {
+//     console.log(result);
+//   }).catch((error) => {
+//     console.log(error);
+//   });
