@@ -4,7 +4,6 @@
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -12,8 +11,14 @@
     "parserOptions": {
         "ecmaVersion": 11
     },
+    "extends": ["airbnb-base", "eslint:recommended"],
     "rules": {
         "quotes": ["error", "single"],
-        "semi": ["warn", "always"]
+        "semi": ["warn", "always"],
+        "comma-dangle": ["off"],
+        "indent": ["off"],
+        "no-console": ["off"],
+        "prefer-arrow-callback": ["warn"],
+        "eol-last": ["off"]
     }
 }

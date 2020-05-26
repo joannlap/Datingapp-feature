@@ -1,8 +1,9 @@
 // variables
 const hbs = require('hbs');
-const express = require('express'); //inladen van express package
-const app = express(); //opstarten van express applicatie
-const port = 4000; //adres van je webserver
+const express = require('express'); // inladen van express package
+
+const app = express(); // opstarten van express applicatie
+const port = 4000; // adres van je webserver
 const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
@@ -24,7 +25,7 @@ hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 // CONNECT TO DATABASE
 let db = null;
-let url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
+const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
 let usersCollection = null;
 
 mongo.MongoClient.connect(url, {
@@ -32,7 +33,7 @@ mongo.MongoClient.connect(url, {
   useUnifiedTopology: true
 }, (err, client) => {
   if (err) {
-    return console.log('Unable to connect to database');
+    console.log('Unable to connect to database');
   } else if (client) {
     console.log('database is connected');
   }
@@ -45,8 +46,8 @@ mongo.MongoClient.connect(url, {
 // functie die mij (de gebruiker) wegfiltert, om alle gebruikers te tonen op de homepagina
 app.get('/', async (req, res, next) => {
   try {
-    //let gebruikers = await usersCollection.find().toArray();
-    let notMe = await usersCollection.find({
+    // let gebruikers = await usersCollection.find().toArray();
+    const notMe = await usersCollection.find({
       id: {
         $ne: 9
       }
@@ -65,8 +66,8 @@ app.get('/', async (req, res, next) => {
 // res.render => naar pagina
 // res.redirect => naar route
 
-//Als je liked wordt je doorgestuurd naar de match pagina, 
-//zodra je disliked blijf je op de index
+// Als je liked wordt je doorgestuurd naar de match pagina,
+// zodra je disliked blijf je op de index
 app.post('/match', (req, res) => {
   if (req.body.like) {
     res.render('match', {
@@ -110,12 +111,3 @@ app.get('/profile', (req, res) => {
 app.listen(port, function () {
   return console.log(`app draait op port ${port}!!`);
 });
-
-// home > match > profile > match overzicht
-//   db.collection('users').findMany(
-// userdata
-//   ).then((result) => {
-//     console.log(result);
-//   }).catch((error) => {
-//     console.log(error);
-//   });
