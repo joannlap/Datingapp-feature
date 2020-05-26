@@ -22,7 +22,7 @@ hbs.registerPartials(path.join(__dirname, '/views/partials'));
 // Hbs tranformeert hbs files naar .html en vertsuurd deze naar public folder
 
 
-//CONNECT TO DATABASE
+// CONNECT TO DATABASE
 let db = null;
 let url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
 let usersCollection = null;
@@ -85,11 +85,11 @@ app.get('/match-list', (req, res) => {
     title: ' match-list',
     // users: userData
   });
-  //liked people inladen
+  // liked people inladen
 });
 
 
-//renders couple objects containing arrays to the profile.hbs
+// renders couple objects containing arrays to the profile.hbs
 app.get('/profile', (req, res) => {
   res.render('profile', {
     title: 'profile',
