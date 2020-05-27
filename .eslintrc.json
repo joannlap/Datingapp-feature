@@ -15,10 +15,14 @@
     "rules": {
         "quotes": ["error", "single"],
         "semi": ["warn", "always"],
+        "arrow-body-style": ["warn", "as-needed"],
         "comma-dangle": ["off"],
         "indent": ["off"],
         "no-console": ["off"],
         "prefer-arrow-callback": ["warn"],
-        "eol-last": ["off"]
+        "eol-last": ["off"],
+        "import/newline-after-import": ["off"],
+        "space-in-parens": ["off"],
+        "consistent-return": ["warn"]
     }
 }

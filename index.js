@@ -4,29 +4,94 @@ const express = require('express'); // inladen van express package
 
 const app = express(); // opstarten van express applicatie
 const port = 4000; // adres van je webserver
-const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 const mongo = require('mongodb');
+
+const router = new express.Router();
+const multer = require('multer');
+const sharp = require('sharp');
+let db = null;
+let usersList = null;
+const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
 
 app
   .set('view engine', 'hbs')
   .set('views', 'views')
   .use(express.static('public')) // gebruikt deze map (public) om html bestanden te serveren
-  .use(bodyParser.urlencoded({
-    extended: true
-  }));
+  .use(express.json());
 
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 // different routes of static pages
 // Hbs tranformeert hbs files naar .html en vertsuurd deze naar public folder
 
+const upload = multer({
+  limits: {
+    fileSize: 1000000,
+  },
+  // deze functie limiteert de file-type naar images alleen
+  imageFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return cb(new Error('Only image files allowed!'));
+    }
+    cb(null, true);
+  },
+});
+
+// Multer middleware die single file upload 'profile-pic' naar database
+app.use(
+  router.post('/test', upload.single('profile-pic'), async (req, res) => {
+    const photo = await sharp(req.file.buffer)
+      .resize({
+        width: 250,
+        height: 250
+      })
+      .png()
+      .toBuffer();
+    db.collection('users')
+      .insertOne({
+        pic: photo,
+      }, )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    res.send('done');
+  })
+);
+
+// retrieve list of images
+// app.get('/images', async (req, res) => {
+//   try {
+//     const photo = await sharp(req.file.buffer);
+//     res.send(photo.data);
+//   } catch (err) {
+//     res.sendStatus(400);
+//   }
+// });
+
+// retrieve images by id
+// app.get('/images/:id', async (req, res) => {
+//   try {
+//     const photo = await sharp(req.file.buffer);
+//     const result = photo.get(req.params.id);
+
+//     if (!result) {
+//       res.sendStatus(404);
+//       return;
+//     }
+//     res.setHeader('Content-Type', result.mimetype);
+    // fs.createReadStream(path.join('public/img/components', result.filename)).pipe(res);
+//   } catch (err) {
+//     res.sendStatus(400);
+//   }
+// });
+// https://scotch.io/tutorials/express-file-uploads-with-multer
 
 // CONNECT TO DATABASE
-let db = null;
-const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
-let usersCollection = null;
 
 mongo.MongoClient.connect(url, {
   useNewUrlParser: true,
@@ -35,58 +100,42 @@ mongo.MongoClient.connect(url, {
   if (err) {
     console.log('Unable to connect to database');
   } else if (client) {
-    console.log('database is connected');
+    console.log('database connected');
   }
 
   db = client.db(process.env.DB_NAME);
-  usersCollection = db.collection('users');
+  usersList = db.collection('users');
 });
 
 // laadt de indexpagina
-// functie die mij (de gebruiker) wegfiltert, om alle gebruikers te tonen op de homepagina
+
 app.get('/', async (req, res, next) => {
   try {
-    // let gebruikers = await usersCollection.find().toArray();
-    const notMe = await usersCollection.find({
-      id: {
-        $ne: 9
-      }
-    }).toArray();
-
-    console.log(notMe);
+    const allUsers = await usersList.find({}).toArray();
+    // console.log(exclMe);
     res.render('index', {
       title: 'home',
-      users: notMe
+      users: allUsers
     });
   } catch (err) {
     next(err);
   }
 });
 
+
 // res.render => naar pagina
 // res.redirect => naar route
 
-// Als je liked wordt je doorgestuurd naar de match pagina,
-// zodra je disliked blijf je op de index
 app.post('/match', (req, res) => {
-  if (req.body.like) {
-    res.render('match', {
-      title: 'match',
-      // users: userData[0]
-    });
-    console.log(req.body.like);
-  } else if (req.body.dislike) {
-    res.redirect('/');
-    console.log(req.body.dislike);
-  }
+  res.render('match', {
+    title: 'match',
+  });
 });
 
 app.get('/match-list', (req, res) => {
   res.render('match-list', {
     title: ' match-list',
-    // users: userData
   });
-  // liked people inladen
 });
 
 
@@ -104,10 +153,9 @@ app.get('/profile', (req, res) => {
   });
 });
 
-// app.get('/*')
-
+app.get('/*', (req, res) => {
+  res.status(404).render('error');
+});
 
 // Application running on port...
-app.listen(port, function () {
-  return console.log(`app draait op port ${port}!!`);
-});
+app.listen(port, () => console.log(`app draait op port ${port}!!`));

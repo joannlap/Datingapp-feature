@@ -150,6 +150,16 @@ ul section form>div {
   align-self: flex-end;
 }
 
+ul section form input[type=submit] {
+  font-size: 2rem;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: grey;
+}
+
+
 ul section form .superlike {
   align-self: flex-start;
   position: relative;
@@ -180,6 +190,7 @@ ul section form .white-btn {
   width: 70px;
   border-radius: 50%;
   margin-bottom: 3.9em;
+  overflow: hidden;
 }
 
 .white-btn>input[type="image"] {
