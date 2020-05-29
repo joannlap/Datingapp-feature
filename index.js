@@ -8,7 +8,6 @@ const path = require('path');
 require('dotenv').config();
 const mongo = require('mongodb');
 
-const router = new express.Router();
 // const multer = require('multer');
 // const sharp = require('sharp');
 let db = null;
@@ -40,12 +39,23 @@ mongo.MongoClient.connect(url, {
 });
 
 // renders home page
+const test = 'joann';
+const dummyUser = (user) => user.name === test;
+
 app.get('/', async (req, res, next) => {
   try {
-    const userOne = await usersList.find({}).toArray();
+    // zoekt door de database naar de userList
+    const database = await usersList.find().toArray();
+    // filtert de geregistreerde gebruiker uit de array
+    const exclMe = database.filter(dummyUser);
+    const allUsers = await usersList.find({
+      name: {
+        $ne: exclMe[0].name
+      }
+    }).toArray();
     res.render('index', {
       title: 'home',
-      users: userOne
+      users: allUsers
     });
   } catch (err) {
     next(err);

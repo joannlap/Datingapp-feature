@@ -339,9 +339,9 @@ figcaption p:last-child {
 .gradient::before {
   content: "";
   position: absolute;
-  top: 20vh;
+  top: 10vh;
   width: 100%;
-  height: 100%;
+  height: 120%;
   background-color: rgb(136, 134, 197);
   z-index: 5;
   background: rgb(136, 134, 197);
