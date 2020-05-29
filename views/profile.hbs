@@ -29,9 +29,20 @@
 
     <article class="interest">
       <h2>Interest</h2>
+      {{#each interest as |item|}}
       <button class="btn_interest">
-        <p>{{interest}}</p>
+        <p>{{'item'[0]}}</p>
       </button>
+      <button class="btn_interest">
+        <p>{{'item'[1}}</p>
+      </button>
+      <button class="btn_interest">
+        <p>{{'item'[2]}}</p>
+      </button>
+      <button class="btn_interest">
+        <p>{{'item'[3]}}</p>
+      </button>
+      {{/each}}
     </article>
   </div>
 </div>
