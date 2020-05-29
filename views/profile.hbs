@@ -1,6 +1,8 @@
+{{#each users}}
 <div class="fillimage">
-  <img src='img/components/bigcollin.jpg' alt="">
+  <img src='img/components/{{imgOld}}' alt="">
 </div>
+{{/each}}
 {{> header}}
 <div class="gradient">
   {{#each users}}
@@ -31,16 +33,7 @@
       <h2>Interest</h2>
       {{#each interest as |item|}}
       <button class="btn_interest">
-        <p>{{'item'[0]}}</p>
-      </button>
-      <button class="btn_interest">
-        <p>{{'item'[1}}</p>
-      </button>
-      <button class="btn_interest">
-        <p>{{'item'[2]}}</p>
-      </button>
-      <button class="btn_interest">
-        <p>{{'item'[3]}}</p>
+        <p>{{'item'}}</p>
       </button>
       {{/each}}
     </article>

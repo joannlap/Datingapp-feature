@@ -241,7 +241,7 @@ section h1 {
   color: #8886C5;
 }
 
-section a .reveal {
+section a .reveal [input=submit] {
   background-color: #FFACB7;
 }
 

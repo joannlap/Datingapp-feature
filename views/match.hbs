@@ -1,17 +1,16 @@
 {{>header}}
-{{#with users}}
-<p>{{name}}: {{age}}, {{profession}}</p>
-{{/with}}
+{{#each users}}
 <figure class="match_image">
-  <img src="img/components/match.png" alt="">
+  <img src="img/components/{{imgMatch}}" alt="">
 </figure>
 <section>
   <h1>You've got a match!</h1>
   <form method="POST" action="/profile">
-    <input type="button" value="revealid" name="revealid">
+    <input type="submit" value="Reveal Idendity" name="revealid">
   </form>
   <form method="POST" action="/">
-    <input type="button" value="keepswiping" name="keepswiping">
+    <input type="submit" value="Keep Swiping" name="keepswiping">
   </form>
 </section>
+{{/each}}
 {{>footer}}
