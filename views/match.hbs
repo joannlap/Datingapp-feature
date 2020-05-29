@@ -7,11 +7,11 @@
 </figure>
 <section>
   <h1>You've got a match!</h1>
-  <a href="/profile"><button class="reveal">Reveal identity</button></a>
-  <a href="/"><button type="button" class='keepswiping'>Keep on swiping</button></a>
+  <form method="POST" action="/profile">
+    <input type="button" value="revealid" name="revealid">
+  </form>
+  <form method="POST" action="/">
+    <input type="button" value="keepswiping" name="keepswiping">
+  </form>
 </section>
 {{>footer}}
-{{!-- <div class="wrapper">
-  <a href="/profile">Reveal identity</a>
-  <a href="/">Keep Swiping</a>
-</div> --}}

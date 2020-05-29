@@ -5,9 +5,10 @@
     {{#each users}}
     <li>
       <section>
-        <figure><img src="img/components/{{pic}}" alt="">
+        <figure><img src="img/components/{{img}}" alt="">
           <figcaption class="card_cap">
             <h2>{{name}}, {{age}}</h2>
+            <h3>{{location}}</h3>
             <h3>{{profession}}</h3>
           </figcaption>
         </figure>
@@ -15,7 +16,6 @@
           <div class="decline">
             <div class="white-btn">
               <input type="image" value="like" src="img/components/cross.svg" name="dislike">
-              {{!-- <input type="submit" value="&#10006" name="dislike"> --}}
             </div>
           </div>
           <div class="superlike">

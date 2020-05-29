@@ -1,15 +1,15 @@
 <div class="fillimage">
-  <img src="img/components/bigcollin.jpg" alt="">
+  <img src='img/components/bigcollin.jpg' alt="">
 </div>
 {{> header}}
 <div class="gradient">
+  {{#each users}}
   <figure>
-    <!-- <img class="collin_adult" src="img/components/collin_adult.jpg" alt=""> -->
     <figcaption class="profilecap">
       <div>
-        <p>Collin, 21</p>
-        <p>Toronto, Canada</p>
-        <p>Choreographer</p>
+        <p>{{name}}, {{age}}</p>
+        <p>{{location}}</p>
+        <p>{{profession}}</p>
       </div>
       <div class="chat-btn">
         <img src="img/components/chat-white.svg" alt="">
@@ -30,19 +30,10 @@
     <article class="interest">
       <h2>Interest</h2>
       <button class="btn_interest">
-        <p>dance</p>
-      </button>
-      <button class="btn_interest">
-        <p>cooking</p>
-      </button>
-      <button class="btn_interest">
-        <p>photography</p>
-      </button>
-      <button class="btn_interest">
-        <p>gaming</p>
+        <p>{{interest}}</p>
       </button>
     </article>
   </div>
 </div>
 </div>
-{{> footer}}
+{{/each}};

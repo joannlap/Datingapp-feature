@@ -210,9 +210,9 @@ section form {
 
 .card_cap {
   position: absolute;
-  bottom: 40%;
+  top: 43%;
   right: 0%;
-  padding: 2em;
+  padding-top: 1em;
   background-color: #FFE0AC;
   font-size: 12px;
   border-top-left-radius: 10px;
