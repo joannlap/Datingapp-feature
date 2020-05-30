@@ -23,6 +23,7 @@
         "eol-last": ["off"],
         "import/newline-after-import": ["off"],
         "space-in-parens": ["off"],
-        "consistent-return": ["warn"]
+        "consistent-return": ["warn"],
+        "no-multiple-empty-lines": ["off"]
     }
 }

@@ -241,7 +241,7 @@ section h1 {
   color: #8886C5;
 }
 
-section a .reveal [input=submit] {
+section form [input] {
   background-color: #FFACB7;
 }
 
@@ -339,9 +339,9 @@ figcaption p:last-child {
 .gradient::before {
   content: "";
   position: absolute;
-  top: 10vh;
+  top: 30vh;
   width: 100%;
-  height: 120%;
+  height: 100%;
   background-color: rgb(136, 134, 197);
   z-index: 5;
   background: rgb(136, 134, 197);

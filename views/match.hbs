@@ -6,10 +6,10 @@
 <section>
   <h1>You've got a match!</h1>
   <form method="POST" action="/profile">
-    <input type="submit" value="Reveal Idendity" name="revealid">
+    <input id={{id}} type="submit" value="Reveal Idendity" name="revealid">
   </form>
   <form method="POST" action="/">
-    <input type="submit" value="Keep Swiping" name="keepswiping">
+    <input id={{id}} type="submit" value="Keep Swiping" name="keepswiping">
   </form>
 </section>
 {{/each}}

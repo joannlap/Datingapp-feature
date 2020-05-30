@@ -1,19 +1,20 @@
 // variables
 const hbs = require('hbs');
 const express = require('express'); // inladen van express package
-
+let bodyParser = require('body-parser');
 const app = express(); // opstarten van express applicatie
 const port = 4000; // adres van je webserver
 const path = require('path');
 require('dotenv').config();
-const mongo = require('mongodb');
+const {
+  MongoClient
+} = require('mongodb');
 
-// const multer = require('multer');
-// const sharp = require('sharp');
 let db = null;
 let usersList = null;
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
 
+// middleware
 app
   .set('view engine', 'hbs')
   .set('views', 'views')
@@ -23,104 +24,129 @@ app
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 
-// CONNECT TO DATABASE
-mongo.MongoClient.connect(url, {
+// DATABASE CONNECTION
+MongoClient.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err, client) => {
   if (err) {
     console.log('Unable to connect to database');
-  } else if (client) {
-    console.log('database connected');
   }
-
   db = client.db(process.env.DB_NAME);
   usersList = db.collection('users');
 });
 
-// renders home page
+// renders home page of all the boys
+// hier weergeeft hij alle gebruikers op de indexpagina, maar zou hier de id's al niet meegegeven moeten worden?
+// Hoe weet hij anders welke knop bij welke id hoort?
 const test = 'joann';
 const dummyUser = (user) => user.name === test;
 
 app.get('/', async (req, res, next) => {
   try {
     // zoekt door de database naar de userList
-    const database = await usersList.find().toArray();
-    // filtert de geregistreerde gebruiker uit de array
-    const exclMe = database.filter(dummyUser);
-    const allUsers = await usersList.find({
-      name: {
-        $ne: exclMe[0].name
-      }
+    const usersCollection = await usersList.find().toArray();
+    // haalt de geregistreerde gebruiker uit de array
+    const exclDummyUser = usersCollection.filter(dummyUser);
+    const boyLiked = exclDummyUser[0].liked;
+    const allBoys = await usersList.find({
+      $and: [{
+        name: {
+          $ne: exclDummyUser[0].name
+        },
+      }, {
+        id: {
+          $nin: Object.values(boyLiked)
+        },
+      }]
     }).toArray();
     res.render('index', {
       title: 'home',
-      users: allUsers
+      users: allBoys
     });
   } catch (err) {
     next(err);
   }
 });
 
-// redirects to home
+
+
+// redirects to homepage when clicking on keepswiping button
 app.post('/', async (req, res, next) => {
   try {
-    const userOne = await usersList.find({}).toArray();
+    const allBoys = await usersList.find({}).toArray();
     res.render('index', {
       title: 'home',
-      users: userOne
+      users: allBoys
     });
   } catch (err) {
     next(err);
   }
 });
 
-// match route
+// dit moet de update functie worden hahaha
+// const updateUser = (user, input) => {
+
+//   if (input.like) {
+//     usersList.updateOne({
+//       id:
+//     })
+//   }
+// }
+
+// match route should update te person who is liked
+// hier moet de id meegegeven worden en geupdatet vanuit de gelikete button uit de index
 app.post('/match', async (req, res, next) => {
   try {
-    const userOne = await usersList.find({
-      name: 'Dré'
+    const usersCollection = await usersList.find().toArray();
+    const exclDummyUser = usersCollection.filter(dummyUser);
+    const boyLiked = exclDummyUser[0].liked;
+    const likedId = req.body;
+    console.log(req.body);
+    const allBoys = await usersList.find({
+      $and: [{
+        name: {
+          $ne: exclDummyUser[0].name,
+        },
+      }, {
+        id: {
+          $nin: Object.values(boyLiked)
+        },
+      }]
     }).toArray();
     res.render('match', {
-      title: 'match',
-      users: userOne
+      users: allBoys
     });
   } catch (err) {
     next(err);
   }
 });
 
-app.post('/profile', async (req, res) => {
+// based on the matched baby picture should reveal the real identity of the match
+// van diezelfde id uit de match moet hij renderen naar de profielpagina
+app.post('/profile', async (req, res, ) => {
   try {
-    const userOne = await usersList.find({
-      name: 'Dré'
+    const usersCollection = await usersList.find().toArray();
+    const exclDummyUser = usersCollection.filter(dummyUser);
+    const boyLiked = exclDummyUser[0].liked;
+    const allBoys = await usersList.find({
+      $and: [{
+        id: {
+          $ne: exclDummyUser[0].name,
+        },
+      }, {
+        id: {
+          $nin: Object.values(boyLiked)
+        },
+      }]
     }).toArray();
     res.render('profile', {
-      title: 'profile',
-      users: userOne
+      users: allBoys
     });
   } catch (err) {
-    console.log(err);
+    res.status(404).send(err);
   }
 });
-// fotos ophalen uit de database
-// router.get('/users', async (req, res) => {
-//   try {
-//     const matchedUser = await db.collection('users').findOne({
-//       name: 'Collin'
-//     });
-//     console.log(matchedUser);
-//     if (!matchedUser || !matchedUser.img) {
-//       throw new Error();
-//     }
-//     res.set('Content-Type', 'image/png');
-//     res.status(200).send(matchedUser.img);
-//     // stuurt een 404 error als de foto niet bestaat in de database
-//   } catch (error) {
-//     console.log(error);
-//     res.send(error);
-//   }
-// });
 
 
 app.get('/*', (req, res) => {
