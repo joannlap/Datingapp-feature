@@ -1,7 +1,7 @@
 // variables
 const hbs = require('hbs');
 const express = require('express'); // inladen van express package
-let bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const app = express(); // opstarten van express applicatie
 const port = 4000; // adres van je webserver
 const path = require('path');
@@ -19,8 +19,10 @@ app
   .set('view engine', 'hbs')
   .set('views', 'views')
   .use(express.static('public')) // gebruikt deze map (public) om html bestanden te serveren
-  .use(express.json());
-
+// .use(express.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 
@@ -98,15 +100,27 @@ app.post('/', async (req, res, next) => {
 // hier moet de id meegegeven worden en geupdatet vanuit de gelikete button uit de index
 app.post('/match', async (req, res, next) => {
   try {
-    const usersCollection = await usersList.find().toArray();
-    const exclDummyUser = usersCollection.filter(dummyUser);
-    const boyLiked = exclDummyUser[0].liked;
-    const likedId = req.body;
-    console.log(req.body);
+    const database = await usersList.find().toArray();
+    const dummyOutList = database.filter(dummyUser);
+    const thisUser = dummyOutList[0];
+    const likedId = req.body.id;
+    const id = parseInt(likedId, 10);
+
+    await usersList.updateOne({
+      id: thisUser.id
+    }, {
+      $push: {
+        liked: id
+      }
+    });
+
+    console.log(dummyOutList[0]);
+
+    console.log(likedId);
     const allBoys = await usersList.find({
       $and: [{
         name: {
-          $ne: exclDummyUser[0].name,
+          $ne: dummyOutList[0].name,
         },
       }, {
         id: {
@@ -128,17 +142,14 @@ app.post('/profile', async (req, res, ) => {
   try {
     const usersCollection = await usersList.find().toArray();
     const exclDummyUser = usersCollection.filter(dummyUser);
-    const boyLiked = exclDummyUser[0].liked;
+    let boyLiked = exclDummyUser[0].liked;
+    console.log(boyLiked);
+    let last_boyLiked = boyLiked.length - 1;
+    const thisUser = exclDummyUser[0];
+    console.log(thisUser);
+
     const allBoys = await usersList.find({
-      $and: [{
-        id: {
-          $ne: exclDummyUser[0].name,
-        },
-      }, {
-        id: {
-          $nin: Object.values(boyLiked)
-        },
-      }]
+      id: last_boyLiked
     }).toArray();
     res.render('profile', {
       users: allBoys
