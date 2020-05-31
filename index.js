@@ -1,9 +1,9 @@
 // variables
 const hbs = require('hbs');
-const express = require('express'); // inladen van express package
+const express = require('express');
 const bodyParser = require('body-parser');
 const app = express(); // opstarten van express applicatie
-const port = 4000; // adres van je webserver
+const port = 4000;
 const path = require('path');
 require('dotenv').config();
 const {
@@ -19,7 +19,6 @@ app
   .set('view engine', 'hbs')
   .set('views', 'views')
   .use(express.static('public')) // gebruikt deze map (public) om html bestanden te serveren
-// .use(express.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -38,33 +37,37 @@ MongoClient.connect(url, {
   usersList = db.collection('users');
 });
 
-// renders home page of all the boys
-// hier weergeeft hij alle gebruikers op de indexpagina, maar zou hier de id's al niet meegegeven moeten worden?
-// Hoe weet hij anders welke knop bij welke id hoort?
+// renders the home page of all the boys except for the registered user
 const test = 'joann';
 const dummyUser = (user) => user.name === test;
 
 app.get('/', async (req, res, next) => {
   try {
-    // zoekt door de database naar de userList
-    const usersCollection = await usersList.find().toArray();
-    // haalt de geregistreerde gebruiker uit de array
-    const exclDummyUser = usersCollection.filter(dummyUser);
-    const boyLiked = exclDummyUser[0].liked;
-    const allBoys = await usersList.find({
+    // finds the all the users items through the array from the database
+    const fromDatabase = await usersList.find().toArray();
+    // filters the dummyUser out of the database
+    const getsDummyUser = fromDatabase.filter(dummyUser);
+    // defines the liked users of the dummyUser
+    const babyLiked = getsDummyUser[0].liked;
+    console.log(getsDummyUser[0].liked);
+    // finds all the boys excluding the dummyUser
+
+    // function that displays all the babies profilecards without
+    // showing the dummyUser
+    const allBabies = await usersList.find({
       $and: [{
         name: {
-          $ne: exclDummyUser[0].name
+          $ne: getsDummyUser[0].name
         },
       }, {
         id: {
-          $nin: Object.values(boyLiked)
+          $nin: Object.values(babyLiked)
         },
       }]
     }).toArray();
     res.render('index', {
       title: 'home',
-      users: allBoys
+      users: allBabies
     });
   } catch (err) {
     next(err);
@@ -76,36 +79,34 @@ app.get('/', async (req, res, next) => {
 // redirects to homepage when clicking on keepswiping button
 app.post('/', async (req, res, next) => {
   try {
-    const allBoys = await usersList.find({}).toArray();
+    const allBabies = await usersList.find({}).toArray();
     res.render('index', {
       title: 'home',
-      users: allBoys
+      users: allBabies
     });
   } catch (err) {
     next(err);
   }
 });
 
-// dit moet de update functie worden hahaha
-// const updateUser = (user, input) => {
-
-//   if (input.like) {
-//     usersList.updateOne({
-//       id:
-//     })
-//   }
-// }
-
 // match route should update te person who is liked
 // hier moet de id meegegeven worden en geupdatet vanuit de gelikete button uit de index
 app.post('/match', async (req, res, next) => {
   try {
-    const database = await usersList.find().toArray();
-    const dummyOutList = database.filter(dummyUser);
-    const thisUser = dummyOutList[0];
+    // finds the all the users items through the array from the database
+    const fromDatabase = await usersList.find().toArray();
+    // filters the dummyUser object from the database, but still in the array
+    const getsDummyUser = fromDatabase.filter(dummyUser);
+    // defines the dummyUser object giving the index 0
+    const thisUser = getsDummyUser[0];
+    // defines the liked users of the dummyUser
+    const babyLiked = getsDummyUser[0].liked;
+    // sents the id value from the client side to the server
     const likedId = req.body.id;
+    // turning the string value into a integer, considering it as an id
     const id = parseInt(likedId, 10);
 
+    // function that updates the liked baby and pushes the id to the liked array
     await usersList.updateOne({
       id: thisUser.id
     }, {
@@ -113,23 +114,25 @@ app.post('/match', async (req, res, next) => {
         liked: id
       }
     });
-
-    console.log(dummyOutList[0]);
-
-    console.log(likedId);
-    const allBoys = await usersList.find({
+    // function that displays all the babies profilecards without
+    // showing the dummyUser
+    const allBabies = await usersList.find({
       $and: [{
         name: {
-          $ne: dummyOutList[0].name,
+          $ne: getsDummyUser[0].name,
         },
       }, {
         id: {
-          $nin: Object.values(boyLiked)
+          $nin: Object.values(babyLiked)
         },
       }]
     }).toArray();
+
+    // console.log(getsDummyUser[0]);
+    console.log(likedId);
+
     res.render('match', {
-      users: allBoys
+      users: allBabies
     });
   } catch (err) {
     next(err);
@@ -140,19 +143,19 @@ app.post('/match', async (req, res, next) => {
 // van diezelfde id uit de match moet hij renderen naar de profielpagina
 app.post('/profile', async (req, res, ) => {
   try {
-    const usersCollection = await usersList.find().toArray();
-    const exclDummyUser = usersCollection.filter(dummyUser);
-    let boyLiked = exclDummyUser[0].liked;
-    console.log(boyLiked);
-    let last_boyLiked = boyLiked.length - 1;
+    const fromDatabase = await usersList.find().toArray();
+    const exclDummyUser = fromDatabase.filter(dummyUser);
+    const boyLiked = exclDummyUser[0].liked;
+    const recentBoyLiked = boyLiked.length - 1;
     const thisUser = exclDummyUser[0];
     console.log(thisUser);
 
-    const allBoys = await usersList.find({
-      id: last_boyLiked
+    const showMatch = await usersList.find({
+      id: recentBoyLiked
     }).toArray();
+    console.log(recentBoyLiked);
     res.render('profile', {
-      users: allBoys
+      users: showMatch
     });
   } catch (err) {
     res.status(404).send(err);
