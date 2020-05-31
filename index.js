@@ -49,45 +49,61 @@ app.get('/', async (req, res, next) => {
     const getsDummyUser = fromDatabase.filter(dummyUser);
     // defines the liked users of the dummyUser
     const babyLiked = getsDummyUser[0].liked;
-    console.log(getsDummyUser[0].liked);
+    // console.log(getsDummyUser[0].liked);
+    const babyDisLiked = getsDummyUser[0].disliked;
     // finds all the boys excluding the dummyUser
 
     // function that displays all the babies profilecards without
     // showing the dummyUser
     const allBabies = await usersList.find({
       $and: [{
-        name: {
-          $ne: getsDummyUser[0].name
+          name: {
+            $ne: getsDummyUser[0].name
+          },
+        }, {
+          id: {
+            $nin: Object.values(babyLiked)
+          },
         },
-      }, {
-        id: {
-          $nin: Object.values(babyLiked)
+        {
+          id: {
+            $nin: Object.values(babyDisLiked)
+          }
         },
-      }]
+      ]
     }).toArray();
     res.render('index', {
       title: 'home',
       users: allBabies
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
 
 
-// redirects to homepage when clicking on keepswiping button
-app.post('/', async (req, res, next) => {
-  try {
-    const allBabies = await usersList.find({}).toArray();
-    res.render('index', {
-      title: 'home',
-      users: allBabies
+let updateUsers = (input, thisUser) => {
+  if (input.like) {
+    usersList.updateOne({
+      id: thisUser.id
+    }, {
+      $push: {
+        liked: thisUser.id
+      }
     });
-  } catch (err) {
-    next(err);
+    return true;
+  } else if (input.dislike) {
+    usersList.updateOne({
+      id: thisUser.id
+    }, {
+      $push: {
+        disliked: thisUser.id
+      }
+    });
+    return false;
   }
-});
+};
 
 // match route should update te person who is liked
 // hier moet de id meegegeven worden en geupdatet vanuit de gelikete button uit de index
@@ -101,41 +117,55 @@ app.post('/match', async (req, res, next) => {
     const thisUser = getsDummyUser[0];
     // defines the liked users of the dummyUser
     const babyLiked = getsDummyUser[0].liked;
+    const recentBabyLiked = babyLiked.length - 1;
+    // defines the disliked users of the dummyUser
+    const babyDisLiked = getsDummyUser[0].disliked;
     // sents the id value from the client side to the server
-    const likedId = req.body.id;
+    const likedId = req.body.like;
     // turning the string value into a integer, considering it as an id
     const id = parseInt(likedId, 10);
 
-    // function that updates the liked baby and pushes the id to the liked array
-    await usersList.updateOne({
-      id: thisUser.id
-    }, {
-      $push: {
-        liked: id
-      }
-    });
-    // function that displays all the babies profilecards without
-    // showing the dummyUser
+
     const allBabies = await usersList.find({
       $and: [{
-        name: {
-          $ne: getsDummyUser[0].name,
+          name: {
+            $ne: getsDummyUser[0].name
+          },
+        }, {
+          id: {
+            $nin: Object.values(babyLiked)
+          },
         },
-      }, {
-        id: {
-          $nin: Object.values(babyLiked)
+        {
+          id: {
+            $nin: Object.values(babyDisLiked)
+          }
         },
-      }]
+      ]
     }).toArray();
 
-    // console.log(getsDummyUser[0]);
-    console.log(likedId);
+    // converts liked ID's into array
+    const match = await usersList.find({
+        id: {
+          $in: Object.values(babyLiked)
+        },
+      })
+      .toArray();
 
-    res.render('match', {
-      users: allBabies
-    });
-  } catch (err) {
-    next(err);
+    const matchedValue = updateUsers(req.body, thisUser);
+
+    if (matchedValue === true) {
+      console.log(`you have a match with `);
+      res.render('match', {
+        users: match
+      });
+    } else if (matchedValue === false) {
+      console.log(`no match with `);
+      res.redirect('/');
+    }
+    console.log(matchedValue);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -143,17 +173,22 @@ app.post('/match', async (req, res, next) => {
 // van diezelfde id uit de match moet hij renderen naar de profielpagina
 app.post('/profile', async (req, res, ) => {
   try {
+    // finds the all the users items through the array from the database
     const fromDatabase = await usersList.find().toArray();
+    // filters the dummyUser object from the database, but still in the array
     const exclDummyUser = fromDatabase.filter(dummyUser);
-    const boyLiked = exclDummyUser[0].liked;
-    const recentBoyLiked = boyLiked.length - 1;
+    // defines all the liked users of the dummyUser in an array
+    const babyLiked = exclDummyUser[0].liked;
+    // defines the baby that is liked at the moment
+    const recentBabyLiked = babyLiked.length - 1;
+    // defines the dummyUser object giving the index 0
     const thisUser = exclDummyUser[0];
     console.log(thisUser);
 
     const showMatch = await usersList.find({
-      id: recentBoyLiked
+      id: recentBabyLiked
     }).toArray();
-    console.log(recentBoyLiked);
+    console.log(recentBabyLiked);
     res.render('profile', {
       users: showMatch
     });
