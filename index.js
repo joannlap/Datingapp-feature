@@ -51,10 +51,7 @@ app.get('/', async (req, res, next) => {
     const babyLiked = getsDummyUser[0].liked;
     // console.log(getsDummyUser[0].liked);
     const babyDisLiked = getsDummyUser[0].disliked;
-    // finds all the boys excluding the dummyUser
-
-    // function that displays all the babies profilecards without
-    // showing the dummyUser
+    // finds all the babies excluding the dummyUser
     const allBabies = await usersList.find({
       $and: [{
           name: {
@@ -72,6 +69,7 @@ app.get('/', async (req, res, next) => {
         },
       ]
     }).toArray();
+    // renders the function to the index
     res.render('index', {
       title: 'home',
       users: allBabies
@@ -82,10 +80,7 @@ app.get('/', async (req, res, next) => {
 });
 
 
-
-
-// match route should update te person who is liked
-// hier moet de id meegegeven worden en geupdatet vanuit de gelikete button uit de index
+// sents the id from the liked user to the match route 
 app.post('/match', async (req, res, next) => {
   try {
     // finds the all the users items through the array from the database
@@ -94,37 +89,13 @@ app.post('/match', async (req, res, next) => {
     const getsDummyUser = fromDatabase.filter(dummyUser);
     // defines the dummyUser object giving the index 0
     const signedUser = getsDummyUser[0];
-    // defines the liked users of the dummyUser
-    const allLikedBabies = getsDummyUser[0].liked;
-    const likedBaby = allLikedBabies.length - 1;
-    // defines the disliked users of the dummyUser
-    const alldislikedBabies = getsDummyUser[0].disliked;
     // sents the id value from the client side to the server
     const likedId = req.body.like;
     // turning the string value into a integer, considering it as an id
     const turnId = parseInt(likedId, 10);
 
-    // function that displays all the users except the dummy user
-    const allBabies = await usersList.find({
-      $and: [{
-          name: {
-            $ne: getsDummyUser[0].name
-          },
-        }, {
-          id: {
-            $nin: Object.values(allLikedBabies)
-          },
-        },
-        {
-          id: {
-            $nin: Object.values(alldislikedBabies)
-          }
-        },
-      ]
-    }).toArray();
-
-    const updateUsers = (input, signedUser) => {
-      if (input.like) {
+    const updateUsers = (name) => {
+      if (name.like) {
         usersList.updateOne({
           id: signedUser.id
         }, {
@@ -133,7 +104,7 @@ app.post('/match', async (req, res, next) => {
           }
         });
         return true;
-      } else if (input.dislike) {
+      } else if (name.dislike) {
         usersList.updateOne({
           id: signedUser.id
         }, {
@@ -148,21 +119,18 @@ app.post('/match', async (req, res, next) => {
 
     // converts liked ID's into array
     const match = await usersList.find({
-        id: {
-          $in: Object.values(allLikedBabies)
-        },
+        id: turnId,
       })
       .toArray();
-
     const matchedValue = updateUsers(req.body, signedUser);
 
     if (matchedValue === true) {
-      console.log(`you have a match with ${signedUser.name}`);
+      console.log(`you have a match with ${turnId.id}`);
       res.render('match', {
         users: match
       });
     } else if (matchedValue === false) {
-      console.log(`no match with  ${signedUser.name}`);
+      console.log(`no match with  ${turnId.id}`);
       res.redirect('/');
     }
     console.log(matchedValue);
@@ -183,14 +151,16 @@ app.post('/profile', async (req, res, ) => {
     const allLikedBabies = exclDummyUser[0].liked;
     // defines the baby that is liked at the moment
     const likedBaby = allLikedBabies.length - 1;
+    const likedUser = allLikedBabies[likedBaby];
+
     // defines the dummyUser object giving the index 0
     const thisUser = exclDummyUser[0];
     console.log(thisUser);
 
     const showMatch = await usersList.find({
-      id: likedBaby
+      id: likedUser
     }).toArray();
-    console.log(likedBaby);
+    console.log(likedUser);
     res.render('profile', {
       users: showMatch
     });
