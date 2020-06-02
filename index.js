@@ -19,6 +19,13 @@ app
   .set('view engine', 'hbs')
   .set('views', 'views')
   .use(express.static('public')) // gebruikt deze map (public) om html bestanden te serveren
+  .use(session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    resave: false,
+    secure: true,
+  }));
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -37,32 +44,50 @@ MongoClient.connect(url, {
   usersList = db.collection('users');
 });
 
-// indexpagina
-// fake user wordt aangemaakt
-const test = 'joann';
-const dummyUser = (user) => user.name === test;
+app.get('/signin', async (req, res, next) => {
+  try {
+    const fromDatabase = await usersList.find().toArray();
 
+    res.render('signin', {
+      title: 'signin',
+      users: fromDatabase
+    });
+  } catch (error) {
+    next(error)
+  }
+});
+
+app.post('/loading', async (req, res, next) => {
+  try {
+    req.session.name = req.body.name;
+    console.log(req.session.name);
+    res.redirect('/');
+  } catch (error) {
+    next(error);
+  }
+});
+
+// indexpagina
 app.get('/', async (req, res, next) => {
   try {
-    // alle gebruikers worden uit de database gehaald
-    const fromDatabase = await usersList.find().toArray();
-    // filtert alle gebruikers uit de array en houdt alleen dummyUser
-    const getsDummyUser = fromDatabase.filter(dummyUser);
+    const signedUser = await usersList.find({
+      name: req.session.name
+    }).toArray();
     // alle gebruikers uit de database gehaald zonder dummyUser mee te nemen
     const allBabies = await usersList.find({
       $and: [{
         name: {
-          $ne: getsDummyUser[0].name
+          $ne: signedUser[0].name
         },
       }, {
-        id: {
+        name: {
           // array waar alle gelikete users in worden opgeslagen later
-          $nin: Object.values(getsDummyUser[0].liked)
+          $nin: Object.values(signedUser[0].liked)
         },
       }, {
-        id: {
+        name: {
           // array waar alle dislikete users in worden opgeslagen later
-          $nin: Object.values(getsDummyUser[0].disliked)
+          $nin: Object.values(signedUser[0].disliked)
         },
       }]
     }).toArray();
@@ -76,64 +101,60 @@ app.get('/', async (req, res, next) => {
   }
 });
 
-
 // gelikete user wordt doorgestuurd naar match pagina
 app.post('/match', async (req, res, next) => {
   try {
-    // alle gebruikers worden uit de database gehaald
-    const fromDatabase = await usersList.find().toArray();
-    // filtert alle gebruikers uit de array en houdt alleen dummyUser
-    const getsDummyUser = fromDatabase.filter(dummyUser);
-    // definieert ingelogde user object met index 0
-    const signedUser = getsDummyUser[0];
-    // haalt de inputwaarde (id) vanuit de client side naar de server verandert de string waarde naar een id
-    const turnIdLike = parseInt(req.body.like, 10);
-    const turnIdDislike = parseInt(req.body.dislike, 10);
+    const signedUser = await usersList.find({
+      name: req.session.name
+    }).toArray();
 
-    // Op het moment wammeer je iemand liked of disliked
+    const getNameLike = req.body.like;
+    const getNameDisLike = req.body.dislike;
+
+    // Wanneer je iemand liked of disliked
     // wordt het hele object van de gebruiker gepusht naar je liked of disliked array
     const updateLikedUser = () => {
       if (req.body.like) {
         usersList.updateOne({
-          id: signedUser.id
+          name: signedUser[0].name
         }, {
           $push: {
-            liked: turnIdLike
+            liked: getNameLike
           }
         });
         return true;
       }
     };
+
     const updateDislikedUser = () => {
       if (req.body.dislike) {
         usersList.updateOne({
-          id: signedUser.id
+          name: signedUser[0].name
         }, {
           $push: {
-            disliked: turnIdDislike
+            disliked: getNameDisLike
           }
         });
         console.log('yoo');
-        return false;
       }
+      return false;
     };
     // het hele object van de gematchte user wordt uit de database gehaald
     // zodat je alleen de user die je hebt geliked/matched op de match pagina te zien krijgt
     const match = await usersList.find({
-        id: turnIdLike,
+        name: getNameLike,
       })
       .toArray();
 
     // updateUsers wordt aangeroepen waarbij een argument wordt meegegeven
-    // object van user wordt meegegeven aan de functie zodat de id kan worden defined
     // als de gematchte waarde true is, dan heb je een match en wordt gerenderd naar match route
-    if (updateLikedUser(signedUser) === true) {
+    if (updateLikedUser(signedUser[0]) === true) {
       console.log(`you have a match with ${match[0].name}`);
       res.render('match', {
         users: match
       });
       // als de gematchte waarde false is, wordt je teruggestuurd naar de index
-    } else if (updateDislikedUser(signedUser) === false) {
+    } else if (updateDislikedUser(signedUser[0]) === false) {
       console.log(`no match.`);
       res.redirect('/');
     }
@@ -143,25 +164,20 @@ app.post('/match', async (req, res, next) => {
 });
 
 // profile pagina van de gematchte baby wordt revealed naar de volwassen jochie.
-app.post('/profile', async (req, res, ) => {
+app.post('/profile', async (req, res) => {
   try {
-    // alle gebruikers worden uit de database gehaald
-    const fromDatabase = await usersList.find().toArray();
-    // filtert alle gebruikers uit de array en houdt alleen dummyUser
-    const exclDummyUser = fromDatabase.filter(dummyUser);
-    // de array waar alle gelikete users worden opgeslagen
-    const allLikedBabies = exclDummyUser[0].liked;
-
+    const signedUser = await usersList.find({
+      name: req.session.name
+    }).toArray();
+    const allLikedBabies = signedUser[0].liked;
     // zorgt voor dat de array niet telt vanaf 0
     // en die waarde wordt in likedUser meegegeven als de index
     const likedBaby = allLikedBabies.length - 1;
     const likedUser = allLikedBabies[likedBaby];
-    // console.log(likedBaby)
-    // console.log(likedUser)
 
     // hele object van de gelikete user wordt uit de database gehaald
     const showMatch = await usersList.find({
-      id: likedUser
+      name: likedUser
     }).toArray();
     // rendert de gelikete user naar de profile pagina
     res.render('profile', {
