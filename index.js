@@ -96,7 +96,7 @@ app.post('/match', async (req, res, next) => {
 
     // Op het moment wammeer je iemand liked of disliked
     // wordt het hele object van de gebruiker gepusht naar je liked of disliked array
-    const updateUsers = () => {
+    const updateLikedUser = () => {
       if (req.body.like) {
         usersList.updateOne({
           id: signedUser.id
@@ -128,13 +128,13 @@ app.post('/match', async (req, res, next) => {
     // updateUsers wordt aangeroepen waarbij een argument wordt meegegeven
     // object van user wordt meegegeven aan de functie zodat de id kan worden defined
     // als de gematchte waarde true is, dan heb je een match en wordt gerenderd naar match route
-    if (updateUsers(signedUser) === true) {
+    if (updateLikedUser(signedUser) === true) {
       console.log(`you have a match with ${match[0].name}`);
       res.render('match', {
         users: match
       });
       // als de gematchte waarde false is, wordt je teruggestuurd naar de index
-    } else if (updateUsers(signedUser) === false) {
+    } else if (updateLikedUser(signedUser) === false) {
       console.log(`no match.`);
       res.redirect('/');
     }
@@ -173,7 +173,7 @@ app.post('/profile', async (req, res, ) => {
   }
 });
 
-
+// rendert error pagina
 app.get('/*', (req, res) => {
   res.status(404).render('error');
 });
