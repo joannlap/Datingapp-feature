@@ -66,7 +66,6 @@ app.get('/', async (req, res, next) => {
         },
       }]
     }).toArray();
-    console.log(allBabies);
     // allBabies wordt gerendert naar de index
     res.render('index', {
       title: 'home',
@@ -87,12 +86,9 @@ app.post('/match', async (req, res, next) => {
     const getsDummyUser = fromDatabase.filter(dummyUser);
     // definieert ingelogde user object met index 0
     const signedUser = getsDummyUser[0];
-    // haalt de inputwaarde (id) vanuit de client side naar de server
-    const likedId = req.body.like;
-    const disLikedId = req.body.dislike;
-    // verandert de string waarde naar een id
-    const turnIdLike = parseInt(likedId, 10);
-    const turnIdDislike = parseInt(disLikedId, 10);
+    // haalt de inputwaarde (id) vanuit de client side naar de server verandert de string waarde naar een id
+    const turnIdLike = parseInt(req.body.like, 10);
+    const turnIdDislike = parseInt(req.body.dislike, 10);
 
     // Op het moment wammeer je iemand liked of disliked
     // wordt het hele object van de gebruiker gepusht naar je liked of disliked array
@@ -106,7 +102,10 @@ app.post('/match', async (req, res, next) => {
           }
         });
         return true;
-      } else if (req.body.dislike) {
+      }
+    };
+    const updateDislikedUser = () => {
+      if (req.body.dislike) {
         usersList.updateOne({
           id: signedUser.id
         }, {
@@ -114,10 +113,10 @@ app.post('/match', async (req, res, next) => {
             disliked: turnIdDislike
           }
         });
+        console.log('yoo');
         return false;
       }
     };
-
     // het hele object van de gematchte user wordt uit de database gehaald
     // zodat je alleen de user die je hebt geliked/matched op de match pagina te zien krijgt
     const match = await usersList.find({
@@ -134,7 +133,7 @@ app.post('/match', async (req, res, next) => {
         users: match
       });
       // als de gematchte waarde false is, wordt je teruggestuurd naar de index
-    } else if (updateLikedUser(signedUser) === false) {
+    } else if (updateDislikedUser(signedUser) === false) {
       console.log(`no match.`);
       res.redirect('/');
     }
