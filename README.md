@@ -3,7 +3,7 @@
 ![css](https://dsc.cloud/9e026c/micrencephalus-liturgical-diphylla-heronsew.jpg)
 
 Hi!
-This is a project for Blok tech. The concept is based on the generic idea of a dating app, but with a twist. On Pixby, users are only allowed to use baby pictures. That way, you get to see their natural faces without any applied filters/edits.
+Welcome to my project for Blok-tech. The concept is based on the generic idea of a dating app, but with a twist. On Pixby, users are only allowed to use baby pictures. That way, you get to see their natural faces without any applied filters/edits. Your biases are only based on the baby pictures :).
 
 ## Install the feature
 
