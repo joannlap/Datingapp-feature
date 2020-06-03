@@ -38,6 +38,7 @@ Insert this command to start the server!
 - Guide for Express Handlebars (Accime, 2018) https://www.youtube.com/playlist?list=PLurIMwd6GdCi3ssXNAcjZ2l5mYaTfYPhf
 - Promises (2017) https://zellwk.com/blog/js-promises/
 - Async/await (2019) https://zellwk.com/blog/async-await/
+- JS-Bootcamp data structures https://github.com/joannlap/js-bootcamp/blob/master/Day%203:%20data-structures.md
 - MongoDB Manual reference: Collection Methods => db.collection.find() https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find
 - MongoDB Manual: Update documents https://docs.mongodb.com/manual/tutorial/update-documents/
 - MongoDB Manual: Query arrays https://docs.mongodb.com/manual/tutorial/query-arrays/
@@ -49,4 +50,3 @@ Insert this command to start the server!
 - Retrieve POST query paramaters https://stackoverflow.com/questions/5710358/how-to-retrieve-post-query-parameters
 - Express Session npm https://www.npmjs.com/package/express-session
 - Body parser https://www.npmjs.com/package/body-parser
--

@@ -203,7 +203,6 @@ section form {
   align-items: center;
 }
 
-
 .home figure {
   position: relative;
 }
@@ -241,8 +240,17 @@ section h1 {
   color: #8886C5;
 }
 
-section form [input] {
+section form [input="submit"] {
   background-color: #FFACB7;
+}
+
+section a [input="submit"] {
+  border-style: solid;
+  border-color: #FFACB7;
+  background-color: transparent;
+  color: black;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 section a .keepswiping {
@@ -250,8 +258,8 @@ section a .keepswiping {
   border-color: #FFACB7;
   background-color: transparent;
   color: black;
-  font-weight: 300;
-  font-size: 14px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 /********************** 

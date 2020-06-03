@@ -25,7 +25,6 @@ app
     resave: false,
     secure: true,
   }));
-
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -57,7 +56,7 @@ app.get('/signin', async (req, res, next) => {
   }
 });
 
-// hier wordt je gestuurd naar de indexpagina
+// hier wordt je doorgestuurd naar de indexpagina
 app.post('/loading', async (req, res, next) => {
   try {
     req.session.name = req.body.name;
@@ -71,10 +70,15 @@ app.post('/loading', async (req, res, next) => {
 // indexpagina
 app.get('/', async (req, res, next) => {
   try {
+    // elke keer de server opnieuw start
+    // redirect je naar inlogpagina
+    if (req.session.name === undefined) {
+      res.redirect('/signin');
+    }
     const signedUser = await usersList.find({
       name: req.session.name
     }).toArray();
-    // alle gebruikers uit de database gehaald zonder dummyUser mee te nemen
+    // alle gebruikers uit de database gehaald zonder signedUser mee te nemen
     const allBabies = await usersList.find({
       $and: [{
         name: {
@@ -82,12 +86,14 @@ app.get('/', async (req, res, next) => {
         },
       }, {
         name: {
-          // array waar alle gelikete users in worden opgeslagen later
+          // array waar alle gelikete users in worden opgeslagen
+          // waardoor hij niet meer zichtbaar is op de index
           $nin: Object.values(signedUser[0].liked)
         },
       }, {
         name: {
-          // array waar alle dislikete users in worden opgeslagen later
+          // array waar alle gelikete users in worden opgeslagen
+          // waardoor hij niet meer zichtbaar is op de index
           $nin: Object.values(signedUser[0].disliked)
         },
       }]
@@ -108,47 +114,47 @@ app.post('/match', async (req, res, next) => {
     const signedUser = await usersList.find({
       name: req.session.name
     }).toArray();
-
-    const getNameLike = req.body.like;
-    const getNameDisLike = req.body.dislike;
-    // Wanneer je iemand liked of disliked
-    // wordt het hele object van de gebruiker gepusht naar je liked of disliked array
-    const updateUsers = () => {
-      if (getNameLike) {
+    // Als je iemand liked of disliked wordt het hele object
+    // van de gebruiker gepusht naar je liked of disliked array
+    const updateLikedUsers = () => {
+      if (req.body.like) {
         usersList.updateOne({
           name: signedUser[0].name,
         }, {
           $push: {
-            liked: getNameLike,
+            liked: req.body.like,
           },
         });
         return true;
-      } else if (getNameDisLike) {
+      }
+    };
+    const updateDislikedUsers = () => {
+      if (req.body.dislike) {
         usersList.updateOne({
           name: signedUser[0].name,
         }, {
           $push: {
-            disliked: getNameDisLike,
+            disliked: req.body.dislike,
           },
         });
+        return false;
       }
-      return false;
     };
     // het hele object van de gematchte user wordt uit de database gehaald
     // zodat je alleen de user die je hebt geliked/matched op de match pagina te zien krijgt
     const match = await usersList.find({
-        name: getNameLike,
+        name: req.body.like,
       })
       .toArray();
     // updateUsers wordt aangeroepen waarbij een argument wordt meegegeven
     // als de gematchte waarde true is, dan heb je een match en wordt gerenderd naar match route
-    if (updateUsers(signedUser[0]) === true) {
-      console.log(`you have a match with `);
+    if (updateLikedUsers(signedUser[0]) === true) {
+      console.log(`you have a match with ${match[0].name} `);
       res.render('match', {
         users: match
       });
       // als de gematchte waarde false is, wordt je teruggestuurd naar de index
-    } else if (updateUsers(signedUser[0]) === false) {
+    } else if (updateDislikedUsers(signedUser[0]) === false) {
       console.log(`no match.`);
       res.redirect('/');
     }
