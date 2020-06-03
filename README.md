@@ -1,4 +1,28 @@
-# Pixby 
+# Pixby dating app feature
+
+This is a project for Blok tech. The concept is based on the generic idea of a dating app, but with a twist. On Pixby, users are only allowed to use baby pictures. That way, you get to see their natural faces without any applied filters/edits.
+
+## Install the feature
+
+### Clone the repo
+
+Clone this repository to your local machine:
+
+`$ git https://github.com/joannlap/Pixby.git`
+
+### Navigate to this repo
+
+`cd Pixby`
+
+### Install node modules
+
+Install all required node modules that the package.json file contains to run the app feature.
+
+`npm install`
+
+### Run the app
+
+`npm run start` to start the server
 
 ## Sources
 
