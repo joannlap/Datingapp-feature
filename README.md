@@ -53,3 +53,5 @@ Insert this command to start the server!
 - Retrieve POST query paramaters https://stackoverflow.com/questions/5710358/how-to-retrieve-post-query-parameters
 - Express Session npm https://www.npmjs.com/package/express-session
 - Body parser https://www.npmjs.com/package/body-parser
+- Uncaught TypeError: Cannot read property ‘name’ of undefined
+ https://trungk18.com/experience/uncaught-type-error/#:~:text=It%20is%20a%20very%20common,undefined%20or%20null%20in%20JavaScript.

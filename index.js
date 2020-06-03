@@ -78,6 +78,7 @@ app.get('/', async (req, res, next) => {
     const signedUser = await usersList.find({
       name: req.session.name
     }).toArray();
+
     // alle gebruikers uit de database gehaald zonder signedUser mee te nemen
     const allBabies = await usersList.find({
       $and: [{
