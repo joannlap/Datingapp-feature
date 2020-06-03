@@ -22,7 +22,9 @@ Install all required node modules that the package.json file contains to run the
 
 ### Run the app
 
-`npm run start` to start the server
+Insert this command to start the server!
+
+`npm run start` 
 
 ## Sources
 
