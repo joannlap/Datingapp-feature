@@ -1,4 +1,4 @@
-# Pixby dating app feature
+# Pixby dating-app feature
 
 ![css](https://dsc.cloud/9e026c/micrencephalus-liturgical-diphylla-heronsew.jpg)
 
@@ -39,9 +39,14 @@ Insert this command to start the server!
 - Promises (2017) https://zellwk.com/blog/js-promises/
 - Async/await (2019) https://zellwk.com/blog/async-await/
 - MongoDB Manual reference: Collection Methods => db.collection.find() https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find
+- MongoDB Manual: Update documents https://docs.mongodb.com/manual/tutorial/update-documents/
+- MongoDB Manual: Query arrays https://docs.mongodb.com/manual/tutorial/query-arrays/
 - MongoDB Manual reference: Array update operators => $push https://docs.mongodb.com/manual/reference/operator/update/push/#up._S_push
 - MongoDB Manual reference: Aggregation Pipeline Operators => $and https://docs.mongodb.com/manual/reference/operator/aggregation/and/#exp._S_and
 - MongoDB Manual reference: Comparison Query Operators => $nin and $ne https://docs.mongodb.com/manual/reference/operator/query-comparison/
 - Airbnb Javascript styleguide https://airbnb.io/javascript/
 - Express Middleware https://blog.webdevsimplified.com/2019-12/express-middleware-in-depth/
 - Retrieve POST query paramaters https://stackoverflow.com/questions/5710358/how-to-retrieve-post-query-parameters
+- Express Session npm https://www.npmjs.com/package/express-session
+- Body parser https://www.npmjs.com/package/body-parser
+-
