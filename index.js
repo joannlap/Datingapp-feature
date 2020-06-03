@@ -44,19 +44,20 @@ MongoClient.connect(url, {
   usersList = db.collection('users');
 });
 
+// inlogpagina waar alle session gebruikers worden weergeven
 app.get('/signin', async (req, res, next) => {
   try {
     const fromDatabase = await usersList.find().toArray();
-
     res.render('signin', {
       title: 'signin',
       users: fromDatabase
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
+// hier wordt je gestuurd naar de indexpagina
 app.post('/loading', async (req, res, next) => {
   try {
     req.session.name = req.body.name;
@@ -110,32 +111,26 @@ app.post('/match', async (req, res, next) => {
 
     const getNameLike = req.body.like;
     const getNameDisLike = req.body.dislike;
-
     // Wanneer je iemand liked of disliked
     // wordt het hele object van de gebruiker gepusht naar je liked of disliked array
-    const updateLikedUser = () => {
-      if (req.body.like) {
+    const updateUsers = () => {
+      if (getNameLike) {
         usersList.updateOne({
-          name: signedUser[0].name
+          name: signedUser[0].name,
         }, {
           $push: {
-            liked: getNameLike
-          }
+            liked: getNameLike,
+          },
         });
         return true;
-      }
-    };
-
-    const updateDislikedUser = () => {
-      if (req.body.dislike) {
+      } else if (getNameDisLike) {
         usersList.updateOne({
-          name: signedUser[0].name
+          name: signedUser[0].name,
         }, {
           $push: {
-            disliked: getNameDisLike
-          }
+            disliked: getNameDisLike,
+          },
         });
-        console.log('yoo');
       }
       return false;
     };
@@ -145,16 +140,15 @@ app.post('/match', async (req, res, next) => {
         name: getNameLike,
       })
       .toArray();
-
     // updateUsers wordt aangeroepen waarbij een argument wordt meegegeven
     // als de gematchte waarde true is, dan heb je een match en wordt gerenderd naar match route
-    if (updateLikedUser(signedUser[0]) === true) {
-      console.log(`you have a match with ${match[0].name}`);
+    if (updateUsers(signedUser[0]) === true) {
+      console.log(`you have a match with `);
       res.render('match', {
         users: match
       });
       // als de gematchte waarde false is, wordt je teruggestuurd naar de index
-    } else if (updateDislikedUser(signedUser[0]) === false) {
+    } else if (updateUsers(signedUser[0]) === false) {
       console.log(`no match.`);
       res.redirect('/');
     }
@@ -174,7 +168,6 @@ app.post('/profile', async (req, res) => {
     // en die waarde wordt in likedUser meegegeven als de index
     const likedBaby = allLikedBabies.length - 1;
     const likedUser = allLikedBabies[likedBaby];
-
     // hele object van de gelikete user wordt uit de database gehaald
     const showMatch = await usersList.find({
       name: likedUser
