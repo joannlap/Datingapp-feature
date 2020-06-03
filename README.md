@@ -35,6 +35,9 @@ Insert this command to start the server!
 - Express API references https://expressjs.com/en/4x/api.html#app
 - Posting to Express server (Madden, 2019) https://medium.com/faun/posting-to-your-express-server-2bf0a0b516d0
 - How to redirect 404 errors to a page in ExpressJS? https://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs
+ Node JS Tutorial for Beginners #24 - Express Route Params (The Net Ninja, 2016) https://www.youtube.com/watch?v=MuMs1pLuT7I&list=PL4cUxeGkcC9gcy9lrvMJ75z9maRw4byYp&index=24
+ Node JS Tutorial for Beginners #30 - Handling POST Requests
+ (The Net Ninja, 2016) https://www.youtube.com/watch?v=MuMs1pLuT7I&list=PL4cUxeGkcC9gcy9lrvMJ75z9maRw4byYp&index=24
 - Guide for Express Handlebars (Accime, 2018) https://www.youtube.com/playlist?list=PLurIMwd6GdCi3ssXNAcjZ2l5mYaTfYPhf
 - Promises (2017) https://zellwk.com/blog/js-promises/
 - Async/await (2019) https://zellwk.com/blog/async-await/
