@@ -1,4 +1,4 @@
-// variables
+// packages
 const hbs = require('hbs');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -75,10 +75,10 @@ app.get('/', async (req, res, next) => {
     if (req.session.name === undefined) {
       res.redirect('/signin');
     }
+    // haalt session gebruiker uit de database
     const signedUser = await usersList.find({
       name: req.session.name
     }).toArray();
-
     // alle gebruikers uit de database gehaald zonder signedUser mee te nemen
     const allBabies = await usersList.find({
       $and: [{
