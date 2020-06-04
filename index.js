@@ -76,7 +76,7 @@ app.get('/', async (req, res, next) => {
       res.redirect('/signin');
     }
     // haalt session gebruiker uit de database
-    const signedUser = await usersList.find({
+    let signedUser = await usersList.find({
       name: req.session.name
     }).toArray();
     // alle gebruikers uit de database gehaald zonder signedUser mee te nemen

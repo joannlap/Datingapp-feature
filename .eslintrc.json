@@ -22,9 +22,10 @@
         "comma-dangle": ["off"],
         "indent": ["off"],
         "no-console": ["off"],
-        "eol-last": ["off"],
         "arrow-body-style": ["as-needed"],
         "import/newline-after-import": ["off"],
+        "prefer-arrow-callback": ["error", "always"],
+        "prefer-const": ["error", "always"],
         "consistent-return": ["warn"]
     }
 }
