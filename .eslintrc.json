@@ -13,17 +13,18 @@
     },
     "extends": ["airbnb-base", "eslint:recommended"],
     "rules": {
-        "quotes": ["off"],
+        "quotes": ["error",
+            "single", {
+                "allowTemplateLiterals": true
+            }
+        ],
         "semi": ["warn", "always"],
-        "arrow-body-style": ["warn", "as-needed"],
         "comma-dangle": ["off"],
         "indent": ["off"],
         "no-console": ["off"],
-        "prefer-arrow-callback": ["warn"],
         "eol-last": ["off"],
+        "arrow-body-style": ["as-needed"],
         "import/newline-after-import": ["off"],
-        "space-in-parens": ["off"],
-        "consistent-return": ["warn"],
-        "no-multiple-empty-lines": ["off"]
+        "consistent-return": ["warn"]
     }
 }
