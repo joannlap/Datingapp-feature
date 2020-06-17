@@ -1,6 +1,9 @@
 {{#each users}}
 <div class="fillimage">
-  <img src='img/components/{{imgOld}}' alt="">
+  <picture>
+    <source srcset="img/components/{{imgOld}}" media="(min-width: 800px)">
+    <img src="img/components/{{imgComp}}" />
+  </picture>
 </div>
 {{/each}}
 {{> header}}
@@ -40,4 +43,4 @@
   </div>
 </div>
 </div>
-{{/each}};
+{{/each}}

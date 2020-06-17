@@ -10,6 +10,9 @@ const {
   MongoClient
 } = require('mongodb');
 const session = require('express-session');
+const {
+  homedir
+} = require('os');
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
 let db = null;
 let usersList = null;
@@ -24,12 +27,18 @@ app
     saveUninitialized: true,
     resave: false,
     secure: true,
+  }))
+  .use(bodyParser.urlencoded({
+    extended: true
   }));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
+app
+  .get('/signin', signIn)
+  .post('/loading', loading)
+  .get('/', home)
+  .post('/match', match)
+  .post('/profile', profile);
 
 // DATABASE CONNECTION
 MongoClient.connect(url, {
@@ -44,7 +53,7 @@ MongoClient.connect(url, {
 });
 
 // inlogpagina waar alle session gebruikers worden weergeven
-app.get('/signin', async (req, res, next) => {
+async function signIn(req, res, next) {
   try {
     const fromDatabase = await usersList.find().toArray();
     res.render('signin', {
@@ -54,10 +63,10 @@ app.get('/signin', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
 // hier wordt je doorgestuurd naar de indexpagina
-app.post('/loading', async (req, res, next) => {
+async function loading(req, res, next) {
   try {
     req.session.name = req.body.name;
     console.log(req.session.name);
@@ -65,10 +74,10 @@ app.post('/loading', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
 // indexpagina
-app.get('/', async (req, res, next) => {
+async function home(req, res, next) {
   try {
     // elke keer de server opnieuw start
     // redirect je naar inlogpagina
@@ -107,40 +116,52 @@ app.get('/', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
+async function updateLikedUsers(isLike, signedUser) {
+  console.log('uitgevoerd');
+  console.log(isLike);
+  try {
+    await usersList.updateOne({
+      name: signedUser[0].name,
+    }, {
+      $push: {
+        liked: isLike,
+      },
+    });
+    return true;
+  } catch (kuuuuttt) {
+    console.log(kuuuuttt);
+  }
+};
+
+
+async function updateDislikedUsers(dislike, signedUser) {
+  console.log('uitgevoerd');
+
+  try {
+    await usersList.updateOne({
+      name: signedUser[0].name,
+    }, {
+      $push: {
+        liked: dislike,
+      },
+    });
+    return false;
+  } catch (kuuuuttt) {
+    console.log(kuuuuttt);
+  }
+};
 // gelikete user wordt doorgestuurd naar match pagina
-app.post('/match', async (req, res, next) => {
+async function match(req, res, next) {
+  const like = req.body.like;
+  const dislike = req.body.dislike;
+
   try {
     const signedUser = await usersList.find({
       name: req.session.name
     }).toArray();
-    // Als je iemand liked of disliked wordt het hele object
-    // van de gebruiker gepusht naar je liked of disliked array
-    const updateLikedUsers = () => {
-      if (req.body.like) {
-        usersList.updateOne({
-          name: signedUser[0].name,
-        }, {
-          $push: {
-            liked: req.body.like,
-          },
-        });
-        return true;
-      }
-    };
-    const updateDislikedUsers = () => {
-      if (req.body.dislike) {
-        usersList.updateOne({
-          name: signedUser[0].name,
-        }, {
-          $push: {
-            disliked: req.body.dislike,
-          },
-        });
-        return false;
-      }
-    };
+
     // het hele object van de gematchte user wordt uit de database gehaald
     // zodat je alleen de user die je hebt geliked/matched op de match pagina te zien krijgt
     const match = await usersList.find({
@@ -149,23 +170,25 @@ app.post('/match', async (req, res, next) => {
       .toArray();
     // updateUsers wordt aangeroepen waarbij een argument wordt meegegeven
     // als de gematchte waarde true is, dan heb je een match en wordt gerenderd naar match route
-    if (updateLikedUsers(signedUser[0]) === true) {
+    if (match[0]) {
+      updateLikedUsers(like, signedUser)
       console.log(`you have a match with ${match[0].name} `);
       res.render('match', {
         users: match
       });
       // als de gematchte waarde false is, wordt je teruggestuurd naar de index
-    } else if (updateDislikedUsers(signedUser[0]) === false) {
+    } else {
+      updateDislikedUsers(dislike, signedUser)
       console.log(`no match.`);
       res.redirect('/');
     }
   } catch (error) {
     next(error);
   }
-});
+};
 
 // profile pagina van de gematchte baby wordt revealed naar de volwassen jochie.
-app.post('/profile', async (req, res) => {
+async function profile(req, res, next) {
   try {
     const signedUser = await usersList.find({
       name: req.session.name
@@ -186,7 +209,7 @@ app.post('/profile', async (req, res) => {
   } catch (err) {
     res.status(404).send(err);
   }
-});
+};
 
 // rendert error pagina
 app.get('/*', (req, res) => {

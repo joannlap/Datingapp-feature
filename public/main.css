@@ -23,7 +23,8 @@ section {
   align-items: center;
 }
 
-button {
+button,
+.revealId {
   width: 300px;
   padding: 20px;
   margin: 0.5em;
@@ -160,6 +161,7 @@ ul section form input[type=submit] {
   background-color: transparent;
   color: transparent;
   cursor: pointer;
+  outline: none;
 }
 
 ul section form .decline input[type=submit] {
@@ -262,6 +264,7 @@ section form {
 }
 
 section h1 {
+  color: #6886c5;
   padding-bottom: 0.8em;
   border-radius: 50%;
 }
