@@ -316,7 +316,7 @@ article:last-child {
   font-size: 14px;
 }
 
-button.btn_interest {
+.btn_interest {
   padding: 1em 0 1em 0;
   width: 120px;
   font-size: 12px;
