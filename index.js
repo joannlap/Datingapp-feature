@@ -3,7 +3,7 @@ const hbs = require('hbs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express(); // opstarten van express applicatie
-const port = 4000;
+// const port = 4000;
 const path = require('path');
 require('dotenv').config();
 const {
@@ -19,6 +19,7 @@ let usersList = null;
 
 // middleware
 app
+  .listen(process.env.PORT || 4000)
   .set('view engine', 'hbs')
   .set('views', 'views')
   .use(express.static('public')) // gebruikt deze map (public) om html bestanden te serveren
@@ -217,4 +218,3 @@ app.get('/*', (req, res) => {
 });
 
 // Application running on port...
-app.listen(port, () => console.log(`app draait op port ${port}!!`));
