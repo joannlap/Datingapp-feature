@@ -322,6 +322,8 @@ article:last-child {
   font-size: 12px;
   background-color: #f9f9f9;
   color: black;
+  border: none;
+  border-radius: 3.1rem;
 }
 
 .chat-btn {
