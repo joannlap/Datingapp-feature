@@ -3,7 +3,7 @@ const hbs = require('hbs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express(); // opstarten van express applicatie
-// const port = 4000;
+const port = 4000;
 const path = require('path');
 require('dotenv').config();
 const {
@@ -13,13 +13,12 @@ const session = require('express-session');
 const {
   homedir
 } = require('os');
-const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
+// const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_URL}`;
 let db = null;
 let usersList = null;
 
 // middleware
 app
-  .listen(process.env.PORT || 4000)
   .set('view engine', 'hbs')
   .set('views', 'views')
   .use(express.static('public')) // gebruikt deze map (public) om html bestanden te serveren
@@ -42,7 +41,7 @@ app
   .post('/profile', profile);
 
 // DATABASE CONNECTION
-MongoClient.connect(url, {
+MongoClient.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err, client) => {
@@ -218,3 +217,5 @@ app.get('/*', (req, res) => {
 });
 
 // Application running on port...
+// app.listenport,  => console.log`app draait op port ${port}!!`;
+app.listen(process.env.PORT || 4000, () => console.log(`app draait op port ${port}!!`));
